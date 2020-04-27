@@ -21,3 +21,11 @@
 .Background {
     background-color: #fafafa;
 }
+
+.WhiteColor {
+    background-color: white;
+}
+
+.MainGradient {
+    background: radial-gradient(circle, rgba(255,210,21,1) 16%, rgba(200,131,62,1) 100%);
+}
