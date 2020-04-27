@@ -1,11 +1,11 @@
 import React from 'react';
 
-const HomePage = (props) => {
+const TrainerSessionHome = (props) => {
   return (
     <div>
-      <h1>HomePage</h1>
+      <h1>TrainerSessionHome</h1>
     </div>
   )
 }
 
-export default HomePage;
+export default TrainerSessionHome;
