@@ -6,6 +6,7 @@ import TrainerHomePage from "../../../ui/trainer/home/pages/TrainerHomePage";
 import TrainerAddProfile from "../../../ui/trainer/profile/pages/TrainerAddProfile";
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
+import TrainerSessionHome from '../../../ui/trainer/sessions/pages/TrainerSessionHome';
 
 const GET_AUTH_DATA = gql`
     query getAuthData {
@@ -23,6 +24,7 @@ function TrainerSwitch() {
         return (
             <Switch>
                 <Route exact path='/'> <TrainerHomePage /> </Route>
+                <Route exact path='/session'> <TrainerSessionHome/> </Route>
                 <Redirect to="/" />
             </Switch>
         )
