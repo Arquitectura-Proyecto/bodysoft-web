@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useApolloClient, useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/react-hooks";
 import { gql } from 'apollo-boost';
 
 import DefaultSwitch from "./default/index";
@@ -12,17 +12,13 @@ const GET_AUTH_DATA = gql`
         token @client
         isLogged @client
         type @client
-        profile @client
     }
 `
 
 function Routes() {
 
-    const client = useApolloClient();
-
     const { data } = useQuery(GET_AUTH_DATA);
-
-    const { isLogged, type, token, profile } = data;
+    const { isLogged, type } = data;
 
     if (isLogged) {
         if (type === 1) {
