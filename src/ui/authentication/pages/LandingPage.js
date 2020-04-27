@@ -4,8 +4,6 @@ import '../../../shared/css/images.css';
 
 import landinglage from '../../../shared/images/landingpage.webp';
 import whitelogo from '../../../shared/images/whitelogo.webp';
-import exercise_girl from '../../../shared/images/exercise_girl.webp';
-import running_people from '../../../shared/images/running_people.webp';
 
 import LandigPageNavbar from '../components/LandingPageNavbar';
 import Footer from '../../../shared/components/Footer';

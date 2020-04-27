@@ -4,6 +4,10 @@
     filter: brightness(15%);
 }
 
+.BackgroundImage{
+    height: 91.8vh;
+}
+
 .BackgroundImageContainer{
     height: 100vh;
     width: 100%;
