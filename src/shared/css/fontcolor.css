@@ -1,0 +1,24 @@
+.FontMaincolor {
+    
+    color: #ffbc02;
+}
+
+.FontLogoColor {
+    color: #f1c512;
+}
+
+.FontDarkColor {
+    color: #5d6d7c;
+}
+
+.FontBlackColor {
+    color: #231F20;
+}
+
+.FontWhiteColor {
+    color: #e2dede
+}
+
+.FontWhiteColor:hover {
+    color: #e6aa02;
+}
