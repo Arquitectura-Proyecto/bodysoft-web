@@ -3,12 +3,16 @@
     font-weight: 500;
 }
 
+.SubtFontTypeRoboto{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+}
+
 .TextFontTypeRoboto{
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
 }
 
-.SubtFontTypeRoboto{
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400;
+.HugeTextFont{
+    font-size: 4em;
 }
