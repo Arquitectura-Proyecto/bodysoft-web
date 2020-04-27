@@ -1,11 +1,10 @@
 import React from 'react';
 
+import Routes from "./shared/routes/index";
+import { BrowserRouter as Router } from 'react-router-dom';
+
 function App() {
-  return (
-    <div>
-      <h1>HelloWorld</h1>
-    </div>
-  );
+  return <Router> <Routes/> </Router>
 }
 
 export default App;

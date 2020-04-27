@@ -3,8 +3,8 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 
 const cache = new InMemoryCache()
 
-export const client = new ApolloClient({
-  uri: 'http://localhost:5000/graphql', cache
+const client = new ApolloClient({
+  uri: process.env.GATEWAY_URL || 'http://localhost:4000/graphql', cache
 });
 
 cache.writeData({  data: {
@@ -13,3 +13,5 @@ cache.writeData({  data: {
   type: 0,
   profile: false
  }});
+
+ export default client;
