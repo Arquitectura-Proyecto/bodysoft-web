@@ -15,7 +15,7 @@ const LandingPage = () => {
     <>
       <LandigPageNavbar />
       <div className="BackgroundImageContainer">
-        <img align="middle" alt="react" src={landinglage} className="BackgroundDarkImage" width="60px" />
+        <img align="middle" alt="react" src={landinglage} className="BackgroundDarkImage"/>
         <div className="container ContentOverImage">
           <div className="row text-center align-items-center justify-content-center">
             <div className="col-12 col-md-6 textcenter">
