@@ -4,7 +4,7 @@ import registerside from '../../../shared/images/registerside.jpg'
 import '../../../shared/css/images.css';
 
 import LandigPageNavbar from '../components/LandingPageNavbar';
-import RegisterForm from '../components/RegisterForm';
+import Register from '../components/Register';
 
 const RegisterPage = () => {
     return (
@@ -16,7 +16,7 @@ const RegisterPage = () => {
                         <img className="img-fluid BackgroundImage" src={registerside} alt="Responsive" />
                     </div>
                     <div className="col-12 col-sm-6 text-center m-0" style={{padding: "9%"}}>
-                        <RegisterForm/>
+                        <Register/>
                     </div>
                 </div>
             </div>

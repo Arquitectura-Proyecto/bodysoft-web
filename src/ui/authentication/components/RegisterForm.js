@@ -1,62 +1,18 @@
 import React from 'react';
 
-import 'antd/dist/antd.css';
 import icon_dumbbell from '../../../shared/images/icon_dumbbell.webp';
 
 import { Form, Input, Button, Select } from 'antd';
-import gql from 'graphql-tag';
-import { useQuery, useMutation } from '@apollo/react-hooks';
-import { useHistory } from "react-router-dom";
 
-const GET_TYPES = gql`
-  {
-    authGetTypes{
-        ID
-        Name
-      }
-  }
-`;
-
-const CREATE_USER = gql`
-  mutation CreateUser($Email: String!, $Password: String!, $TypeID: Int!){
-        authCreateUser(authUserData: {Email: $Email, Password: $Password, TypeID: $TypeID})
-  }
-`;
-
-const RegisterForm = () => {
+const RegisterForm = (props) => {
     
-    let history = useHistory();
-    const { loading: queryLoading, error: queryError, data } = useQuery(GET_TYPES);
-    const [createUser, { loading: mutationLoading, error: mutationError }] = useMutation(CREATE_USER, { errorPolicy: 'all' });
-
-    if (queryLoading) return (
-        <div className="spinner-border text-warning" role="status">
-            <span className="sr-only">Loading...</span>
-        </div>
-    );
-
-    if (queryError) return (
-        <div className="alert alert-danger" role="alert">
-            {queryError.message}
-        </div>
-    );
-
-    const onFinish = async values => {
-        try {
-            await createUser({ variables: { Email: values.Email, Password: values.Password, TypeID: values.TypeID } });
-            history.push("/login");
-        } catch (e) {
-
-        }
-    };
-
     const types = [];
     const { Option } = Select;
-    data.authGetTypes.map((data) => {
+    props.data.authGetTypes.map((data) => {
         types.push(<Option key={data.ID} value={data.ID}>{data.Name}</Option>)
         return null;
     });
-
+    
     return (
         <>
             <h1 className="TitleFontTypeRoboto">Crear Cuenta</h1>
@@ -64,7 +20,7 @@ const RegisterForm = () => {
             <Form
                 name="basic"
                 initialValues={{ remember: true }}
-                onFinish={onFinish}
+                onFinish={props.onFinish}
                 layout={'vertical'}
                 size={'medium'}
             >
@@ -100,18 +56,18 @@ const RegisterForm = () => {
             </Button>
                 </Form.Item>
             </Form>
-            {mutationLoading &&
+            {props.mutationLoading &&
                 <div className="spinner-border text-warning" role="status">
                     <span className="sr-only">Loading...</span>
                 </div>
             }
-            {mutationError &&
+            {props.mutationError &&
                 <div className="alert alert-danger m-0" role="alert">
-                    {mutationError.message.substring(19)}
+                    {props.mutationError.message.substring(19)}
                 </div>
             }
         </>
-    );
+    )
 }
 
 export default RegisterForm;
