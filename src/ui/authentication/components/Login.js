@@ -53,6 +53,9 @@ const Login = () => {
                 profile: tokenData.authValidateAuthToken.Profile
             }
         })
+        localStorage.setItem("token", data.authAuthentication.Token)
+        localStorage.setItem("type", tokenData.authValidateAuthToken.TypeID)
+        localStorage.setItem("profile", (tokenData.authValidateAuthToken.Profile ? "true":""))
     };
 
     if (error && error.message.substring(14, 18).trim() === "406") {

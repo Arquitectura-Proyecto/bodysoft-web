@@ -1,11 +1,18 @@
 import React from 'react';
 
+import '../../../../shared/css/colors.css'
+import '../css/trainerSession.css'
 import 'antd/dist/antd.css';
-import { Typography, Row, Col, Divider, List, Avatar } from 'antd';
+import { Typography, Row, Col, Divider, List, Avatar, message, Popover, Button, Layout, Menu, Switch } from 'antd';
+
+import whitelogo from '../../../../shared/images/whitelogo.webp';
 
 import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
-
 const { Title, } = Typography;
+
+const { Header, Content, Sider } = Layout;
+
+const { SubMenu } = Menu;
 
 const TrainerSessionHome = () => {
 
@@ -35,25 +42,31 @@ const TrainerSessionHome = () => {
     {
       title: '9 am',
     },
+    {
+      title: '9 am',
+    },
+    {
+      title: '9 am',
+    },
+    {
+      title: '9 am',
+    },
+    {
+      title: '9 am',
+    },
+    {
+      title: '9 am',
+    },
+    {
+      title: '9 am',
+    },
   ];
-
-  const IconText = ({ icon, text }) => (
-    <span>
-      {React.createElement(icon, { style: { marginRight: 8 } })}
-      {text}
-    </span>
-  );
 
   return (
     <>
       <Row justify="center">
         <Col>
-          <Title>Sesiones</Title>
-        </Col>
-      </Row>
-      <Row justify="center">
-        <Col>
-          <Title>Tus sesiones</Title>
+          <h1 className="TitleFontTypeRoboto mb-0">Tus sesiones</h1>
         </Col>
       </Row>
       <Row justify="center">
@@ -71,8 +84,8 @@ const TrainerSessionHome = () => {
                     <List.Item.Meta
                       title={
                         <Row style={{ background: "white" }} justify="center" >
-                              {item.title}
-                            </Row>
+                          {item.title}
+                        </Row>
                       }
                       description=""
                     />
@@ -81,7 +94,7 @@ const TrainerSessionHome = () => {
               />
             </Col>
             <Col xs={4} justify="center">
-            <Row justify="center"><Title level={3}>Lunes</Title></Row>
+              <Row justify="center"><Title level={3}>Lunes</Title></Row>
               <List
                 itemLayout="horizontal"
                 dataSource={data}
@@ -97,31 +110,34 @@ const TrainerSessionHome = () => {
                     color = "#096dd9"
                   }
                   return (
-                    <List.Item
-                      style={{ border: "1px solid #e8e8e8",backgroundColor:color}}
-                    >
-                      <List.Item.Meta
-                        title={
-                          <div style={{}}>
-                            <Row style={{ color:"white" }} justify="center" >
-                              {name}
-                              <br/>
-                            </Row>
-                          </div>
-                        }
-                        description={
-                          <Row justify="center" style={{ color: "black", fontWeight: "500" }}>
+                    <Popover placement="topLeft" title={"Disponible"} content={"Esperando a que un usuario escoja este horario"}>
+                      <List.Item
+                        style={{ border: "1px solid #e8e8e8", backgroundColor: color }}
+                        type="primary"
+                      >
+                        <List.Item.Meta
+                          title={
+                            <div style={{}}>
+                              <Row style={{ color: "white" }} justify="center" >
+                                {name}
+                                <br />
+                              </Row>
+                            </div>
+                          }
+                          description={
+                            <Row justify="center" style={{ color: "black", fontWeight: "500" }}>
 
-                          </Row>
-                        }
-                      />
-                    </List.Item>
+                            </Row>
+                          }
+                        />
+                      </List.Item>
+                    </Popover>
                   )
                 }}
               />
             </Col>
             <Col xs={4} justify="center">
-            <Row justify="center"><Title level={3}>Lunes</Title></Row>
+              <Row justify="center"><Title level={3}>Martes</Title></Row>
               <List
                 itemLayout="horizontal"
                 dataSource={data}
@@ -131,6 +147,28 @@ const TrainerSessionHome = () => {
                   if (item.title === "1 am") {
                     name = "Jaime Eduardo"
                     color = "#cf1322"
+                    return (
+                      <List.Item
+                        style={{ border: "1px solid #e8e8e8", backgroundColor: color, cursor: "pointer" }}
+                        onClick={() => message.warning('soy una papa')}
+                      >
+                        <List.Item.Meta
+                          title={
+                            <div style={{}}>
+                              <Row style={{ color: "white" }} justify="center" >
+                                {name}
+                                <br />
+                              </Row>
+                            </div>
+                          }
+                          description={
+                            <Row justify="center" style={{ color: "black", fontWeight: "500" }}>
+
+                            </Row>
+                          }
+                        />
+                      </List.Item>
+                    )
                   }
                   if (item.title === "2 am") {
                     name = "Disponible"
@@ -142,14 +180,14 @@ const TrainerSessionHome = () => {
                   }
                   return (
                     <List.Item
-                      style={{ border: "1px solid #e8e8e8",backgroundColor:color}}
+                      style={{ border: "1px solid #e8e8e8", backgroundColor: color }}
                     >
                       <List.Item.Meta
                         title={
                           <div style={{}}>
-                            <Row style={{ color:"white" }} justify="center" >
+                            <Row style={{ color: "white" }} justify="center" >
                               {name}
-                              <br/>
+                              <br />
                             </Row>
                           </div>
                         }
@@ -165,7 +203,7 @@ const TrainerSessionHome = () => {
               />
             </Col>
             <Col xs={4} justify="center">
-            <Row justify="center"><Title level={3}>Lunes</Title></Row>
+              <Row justify="center"><Title level={3}>Lunes</Title></Row>
               <List
                 itemLayout="horizontal"
                 dataSource={data}
@@ -182,14 +220,14 @@ const TrainerSessionHome = () => {
                   }
                   return (
                     <List.Item
-                      style={{ border: "1px solid #e8e8e8",backgroundColor:color}}
+                      style={{ border: "1px solid #e8e8e8", backgroundColor: color }}
                     >
                       <List.Item.Meta
                         title={
                           <div style={{}}>
-                            <Row style={{ color:"white" }} justify="center" >
+                            <Row style={{ color: "white" }} justify="center" >
                               {name}
-                              <br/>
+                              <br />
                             </Row>
                           </div>
                         }
@@ -205,7 +243,7 @@ const TrainerSessionHome = () => {
               />
             </Col>
             <Col xs={4} justify="center">
-            <Row justify="center"><Title level={3}>Lunes</Title></Row>
+              <Row justify="center"><Title level={3}>Lunes</Title></Row>
               <List
                 itemLayout="horizontal"
                 dataSource={data}
@@ -222,14 +260,14 @@ const TrainerSessionHome = () => {
                   }
                   return (
                     <List.Item
-                      style={{ border: "1px solid #e8e8e8",backgroundColor:color}}
+                      style={{ border: "1px solid #e8e8e8", backgroundColor: color }}
                     >
                       <List.Item.Meta
                         title={
                           <div style={{}}>
-                            <Row style={{ color:"white" }} justify="center" >
+                            <Row style={{ color: "white" }} justify="center" >
                               {name}
-                              <br/>
+                              <br />
                             </Row>
                           </div>
                         }
@@ -245,7 +283,7 @@ const TrainerSessionHome = () => {
               />
             </Col>
             <Col xs={4} justify="center">
-            <Row justify="center"><Title level={3}>Lunes</Title></Row>
+              <Row justify="center"><Title level={3}>Lunes</Title></Row>
               <List
                 itemLayout="horizontal"
                 dataSource={data}
@@ -262,14 +300,14 @@ const TrainerSessionHome = () => {
                   }
                   return (
                     <List.Item
-                      style={{ border: "1px solid #e8e8e8",backgroundColor:color}}
+                      style={{ border: "1px solid #e8e8e8", backgroundColor: color }}
                     >
                       <List.Item.Meta
                         title={
                           <div style={{}}>
-                            <Row style={{ color:"white" }} justify="center" >
+                            <Row style={{ color: "white" }} justify="center" >
                               {name}
-                              <br/>
+                              <br />
                             </Row>
                           </div>
                         }
@@ -287,7 +325,7 @@ const TrainerSessionHome = () => {
           </Row>
         </Col>
       </Row>
-    
+
     </>
   )
 }
