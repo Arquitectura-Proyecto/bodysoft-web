@@ -8,9 +8,9 @@ const client = new ApolloClient({
 });
 
 cache.writeData({  data: {
-  token: '',
-  type: 0,
-  profile: false
+  token: localStorage.getItem("token") || '',
+  type: parseInt(localStorage.getItem("type")) || 0,
+  profile: !!localStorage.getItem("profile") || false
  }});
 
  export default client;

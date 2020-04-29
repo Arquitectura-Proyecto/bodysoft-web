@@ -2,11 +2,13 @@ import React from 'react';
 
 import { Switch, Route, Redirect } from 'react-router-dom';
 
-import TrainerHomePage from "../../../ui/trainer/home/pages/TrainerHomePage";
-import TrainerAddProfile from "../../../ui/trainer/profile/pages/TrainerAddProfile";
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
+
+import TrainerHomePage from "../../../ui/trainer/home/pages/TrainerHomePage";
+import TrainerAddProfile from "../../../ui/trainer/profile/pages/TrainerAddProfile";
 import TrainerSessionHome from '../../../ui/trainer/sessions/pages/TrainerSessionHome';
+import Navbar from "../../../ui/trainer/navbar/pages/Navbar";
 
 const GET_AUTH_DATA = gql`
     query getAuthData {
@@ -22,11 +24,14 @@ function TrainerSwitch() {
 
     if (data.profile) {
         return (
-            <Switch>
-                <Route exact path='/'> <TrainerHomePage /> </Route>
-                <Route exact path='/session'> <TrainerSessionHome/> </Route>
-                <Redirect to="/" />
-            </Switch>
+            <>
+                <Route path='/' > <Navbar /> </Route>
+                <Switch>
+                    <Route exact path='/'> <TrainerHomePage /> </Route>
+                    <Route exact path='/session'> <TrainerSessionHome /> </Route>
+                    <Redirect to="/" />
+                </Switch>
+            </>
         )
     } else {
         return (
