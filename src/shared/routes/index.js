@@ -10,7 +10,6 @@ import UserSwitch from './user/index'
 const GET_AUTH_DATA = gql`
     query getAuthData {
         token @client
-        isLogged @client
         type @client
     }
 `
@@ -18,9 +17,9 @@ const GET_AUTH_DATA = gql`
 function Routes() {
 
     const { data } = useQuery(GET_AUTH_DATA);
-    const { isLogged, type } = data;
+    const { token, type } = data;
 
-    if (isLogged) {
+    if (token !== '') {
         if (type === 1) {
             return <TrainerSwitch />
         } else if (type === 2) {
