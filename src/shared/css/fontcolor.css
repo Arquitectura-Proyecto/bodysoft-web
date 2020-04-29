@@ -18,6 +18,18 @@
     color: #e2dede
 }
 
-.FontWhiteColor:hover {
+.FontWhiteLink {
+    color: #e2dede
+}
+
+.FontWhiteLink:hover {
+    color: #e6aa02;
+}
+
+.FontBlackLink {
+    color: #231F20;
+}
+
+.FontBlackLink:hover {
     color: #e6aa02;
 }
