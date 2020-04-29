@@ -15,7 +15,7 @@ const RegisterForm = (props) => {
     
     return (
         <>
-            <h1 className="TitleFontTypeRoboto">Crear Cuenta</h1>
+            <h1 className="TitleFontTypeRoboto mb-0">Crear Cuenta</h1>
             <img alt="react" src={icon_dumbbell} style={{ width: "70px" }} className="m-0" />
             <Form
                 name="basic"
@@ -32,7 +32,7 @@ const RegisterForm = (props) => {
                     <Input />
                 </Form.Item>
                 <Form.Item
-                    label="Password"
+                    label="Contraseña"
                     name="Password"
                     rules={[{ required: true, message: 'Minimo 8 caracteres', min: 8 }]}
                 >

@@ -8,8 +8,7 @@ const client = new ApolloClient({
 });
 
 cache.writeData({  data: {
-  token: "",
-  isLogged: false,
+  token: '',
   type: 0,
   profile: false
  }});

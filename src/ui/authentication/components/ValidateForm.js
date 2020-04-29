@@ -1,8 +1,26 @@
 import React from 'react';
 
-import { Form, InputNumber, Button } from 'antd';
+import gql from 'graphql-tag';
+import { useMutation, } from "@apollo/react-hooks";
+
+import { Form, InputNumber, Button , Input} from 'antd';
+
+const VALIDATE_USER = gql`
+  mutation ValidateUser($Email: String!, $Vcode: Int!){
+    authVerifyAcount(email: $Email, vcode: $Vcode)
+  }
+`;
 
 const ValidateAcount = (props) => {
+
+    const [validateUser, { loading: mutationLoading, error: mutationError }] = useMutation(VALIDATE_USER, { errorPolicy: 'all' });
+
+    const onSubmitValidate = async values => {
+        try {
+            await validateUser({ variables: { Email: values.Email, Vcode: values.vcode } });
+            props.validated();
+        } catch (e) { }
+    };
 
     return (
         <>
@@ -11,10 +29,17 @@ const ValidateAcount = (props) => {
             <Form
                 name="basic"
                 initialValues={{ remember: true }}
-                onFinish={props.onFinish}
+                onFinish={onSubmitValidate}
                 layout={'vertical'}
                 size={'large'}
             >
+                <Form.Item
+                    label="Correo"
+                    name="Email"
+                    rules={[{ required: true, type: 'email', message: 'Por favor ingrese un correo valido' }]}
+                >
+                    <Input />
+                </Form.Item>
                 <Form.Item
                     label="Codigo de verificacion."
                     name="vcode"
@@ -22,7 +47,7 @@ const ValidateAcount = (props) => {
                 >
                     <InputNumber />
                 </Form.Item>
-                <br/>
+                <br />
                 <Form.Item >
                     <Button
                         type="primary"
@@ -33,14 +58,14 @@ const ValidateAcount = (props) => {
                     </Button>
                 </Form.Item>
             </Form>
-            {props.mutationLoading &&
+            {mutationLoading &&
                 <div className="spinner-border text-warning" role="status">
                     <span className="sr-only">Loading...</span>
                 </div>
             }
-            {props.mutationError &&
+            {mutationError &&
                 <div className="alert alert-danger m-0" role="alert">
-                    {props.mutationError.message.substring(19)}
+                    {mutationError.message.substring(19)}
                 </div>
             }
         </>

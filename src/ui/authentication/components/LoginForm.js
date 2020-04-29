@@ -1,13 +1,15 @@
 import React from 'react';
 
-import { Form, InputNumber, Button } from 'antd';
+import exercise_girl from '../../../shared/images/exercise_girl.webp';
 
-const ValidateAcount = (props) => {
+import { Form, Input, Button } from 'antd';
+
+const LoginForm = (props) => {
 
     return (
         <>
-            <h1 className="TitleFontTypeRoboto">Validar Cuenta</h1>
-            <p>Su cuenta fue creada exitosamente, pero para poder utilizar la cuenta hay que validarla con el correo electrónico. En el formulario de abajo ingrese el código de verificación enviado al correo electrónico con el que creó la cuenta.</p>
+            <h1 className="TitleFontTypeRoboto">BodySoft</h1>
+            <img alt="react" src={exercise_girl} style={{ width: "70px" }} className="m-0" />
             <Form
                 name="basic"
                 initialValues={{ remember: true }}
@@ -16,23 +18,32 @@ const ValidateAcount = (props) => {
                 size={'large'}
             >
                 <Form.Item
-                    label="Codigo de verificacion."
-                    name="vcode"
-                    rules={[{ required: true, type: 'number', message: 'Por favor ingrese un codigo valido' }]}
+                    label="Correo"
+                    name="Email"
+                    rules={[{ required: true, type: 'email', message: 'Por favor ingrese un correo valido' }]}
                 >
-                    <InputNumber />
+                    <Input />
                 </Form.Item>
-                <br/>
+                <Form.Item
+                    label="Contraseña"
+                    name="Password"
+                    rules={[{ required: true, message: 'Ingrese una contraseña' }]}
+                >
+                    <Input.Password />
+                </Form.Item>
                 <Form.Item >
                     <Button
                         type="primary"
                         htmlType="submit"
                         style={{ background: "#ffbc02", color: "#231F20", borderColor: "#e3a765" }}
                     >
-                        Validar
-                    </Button>
+                        Ingresar
+            </Button>
                 </Form.Item>
             </Form>
+            <button type="button" className="btn btn-link FontBlackLink" onClick={() => { props.changePassHandler() }}>
+                Olvidaste tu contraseña?
+            </button>
             {props.mutationLoading &&
                 <div className="spinner-border text-warning" role="status">
                     <span className="sr-only">Loading...</span>
@@ -47,4 +58,4 @@ const ValidateAcount = (props) => {
     )
 }
 
-export default ValidateAcount;
+export default LoginForm;
