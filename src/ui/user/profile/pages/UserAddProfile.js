@@ -1,6 +1,6 @@
 import React from 'react';
 
-import box from '../../../../shared/images/Boxer.jpg'
+import box from '../../../../shared/images/box.webp';
 
 import BlankNavBar from '../../../../shared/components/BlankNavBar';
 import AssignProfileForm from '../components/AssignProfileForm';

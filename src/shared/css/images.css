@@ -4,6 +4,12 @@
     filter: brightness(15%);
 }
 
+.BackgroundDarkImageHuge{
+    height: 140vh;
+    width: 100%;
+    filter: brightness(15%);
+}
+
 .BackgroundImage{
     height: 91.78vh;
 }
@@ -19,4 +25,11 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.ContentOverImageTop{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -35%);
 }
