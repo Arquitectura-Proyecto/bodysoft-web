@@ -18,7 +18,7 @@ const RecoverPassword = (props) => {
 
 
     const [isSuccesfull, setIsSuccesfull] = useState(false);
-    const [authentication, { error }] = useLazyQuery(RECOVER_PASSWORD, { errorPolicy: 'all' });
+    const [authentication, { error, loading }] = useLazyQuery(RECOVER_PASSWORD, { errorPolicy: 'all' });
 
     const onSubmitRecover = async values => {
         await authentication({ variables: { Email: values.Email } });
@@ -29,6 +29,12 @@ const RecoverPassword = (props) => {
     if (isSuccesfull && !error) {
         message = <div className="alert alert-success m-0" role="alert">
             Se envio el correo
+        </div>
+    }
+
+    if (loading) {
+        return <div className="spinner-border text-warning" role="status">
+            <span className="sr-only">Loading...</span>
         </div>
     }
 
@@ -67,7 +73,7 @@ const RecoverPassword = (props) => {
             {message}
             {error &&
                 <div className="alert alert-danger m-0" role="alert">
-                    {error.message.substring(19)}
+                    No hay una cuenta asociada con ese correo
                 </div>
             }
         </>

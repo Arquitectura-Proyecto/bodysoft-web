@@ -6,6 +6,7 @@ import UserHomePage from "../../../ui/user/home/pages/UserHomePage";
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import UserAddProfile from '../../../ui/user/profile/pages/UserAddProfile';
+import Navbar from "../../../ui/trainer/navbar/pages/Navbar";
 
 const GET_AUTH_DATA = gql`
     query getAuthData {
@@ -21,17 +22,22 @@ function UserSwitch() {
 
     if (data.profile) {
         return (
-            <Switch>
-                <Route exact path='/'> <UserHomePage /> </Route>
-                <Redirect to="/" />
-            </Switch>
+            <>
+                <Route path='/' > <Navbar /> </Route>
+                <Switch>
+                    <Route exact path='/'> <UserHomePage /> </Route>
+                    <Redirect to="/" />
+                </Switch>
+            </>
         )
     } else {
         return (
-            <Switch>
-                <Route exact path='/'> <UserAddProfile/> </Route>
-                <Redirect to="/" />
-            </Switch>
+            <>
+                <Switch>
+                    <Route exact path='/'> <UserAddProfile /> </Route>
+                    <Redirect to="/" />
+                </Switch>
+            </>
         )
     }
 }
