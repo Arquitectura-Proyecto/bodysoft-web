@@ -53,6 +53,7 @@ const AssignProfileForm = () => {
 
   if (data) {
     client.writeData({ data: { profile: true } });
+    localStorage.setItem("profile", "true");
   }
 
   return (
