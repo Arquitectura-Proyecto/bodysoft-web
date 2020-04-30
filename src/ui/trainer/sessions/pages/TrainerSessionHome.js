@@ -8,16 +8,65 @@ import { Typography, Row, Col, Divider, List, Avatar, message, Popover, Button, 
 import whitelogo from '../../../../shared/images/whitelogo.webp';
 
 import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
+import { gql } from 'apollo-boost';
+import { useQuery } from '@apollo/react-hooks';
 const { Title, } = Typography;
 
 const { Header, Content, Sider } = Layout;
 
 const { SubMenu } = Menu;
 
+const GET_SESSIONS = gql`
+  query GetSessions($Token:String!){
+    getAllbyId(Token:$Token){
+      id_schedule
+      idCoach
+      daySession
+      iniTime
+      endTime
+      idUser
+    }
+  }
+`
+
+const GET_TOKEN = gql`
+query getToken{
+  token @client
+  type @client
+}
+`
+
 const TrainerSessionHome = () => {
 
+  const token = useQuery(GET_TOKEN).data.token;
 
-  const data = [
+  console.log('token', token)
+
+  const { data, error, loading } = useQuery(GET_SESSIONS, { variables: { Token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MSwiUHJvZmlsZSI6ZmFsc2UsIlR5cGVJRCI6MSwiZXhwIjoxNTg4MjEwMTMzfQ.Hae2d3fJUdmWNYzM-xKPBTlikGwLbIDVOhA7qNVEAqk" } });
+
+  console.log('data', data);
+  console.log('error', error);
+
+  if (error) {
+    return <div>error</div>
+  }
+
+  if (loading) {
+    return <div>loading...</div>
+  }
+
+  console.log(data.getAllbyId.map(session => {
+    console.log(session);
+    session.hour = session.iniTime.substring(0,2);
+    session.day = session.daySession.substring(5,7);
+    session.dateNumber = session.daySession +"-"+ session.iniTime.substring(0,2);
+    return session;
+    })
+  )
+
+  console.log(data.getAllbyId);
+
+  const dataDos = [
     {
       title: '1 am',
     },
@@ -76,7 +125,7 @@ const TrainerSessionHome = () => {
               <Row justify="center"  ><Title level={3}>Horario</Title></Row>
               <List
                 itemLayout="horizontal"
-                dataSource={data}
+                dataSource={dataDos}
                 renderItem={item => (
                   <List.Item
                     style={{ border: "1px solid #e8e8e8" }}
@@ -97,7 +146,7 @@ const TrainerSessionHome = () => {
               <Row justify="center"><Title level={3}>Lunes</Title></Row>
               <List
                 itemLayout="horizontal"
-                dataSource={data}
+                dataSource={dataDos}
                 renderItem={item => {
                   let color = "white";
                   let name = "";
@@ -140,7 +189,7 @@ const TrainerSessionHome = () => {
               <Row justify="center"><Title level={3}>Martes</Title></Row>
               <List
                 itemLayout="horizontal"
-                dataSource={data}
+                dataSource={dataDos}
                 renderItem={item => {
                   let color = "white";
                   let name = "";
@@ -206,7 +255,7 @@ const TrainerSessionHome = () => {
               <Row justify="center"><Title level={3}>Lunes</Title></Row>
               <List
                 itemLayout="horizontal"
-                dataSource={data}
+                dataSource={dataDos}
                 renderItem={item => {
                   let color = "white";
                   let name = "";
@@ -246,7 +295,7 @@ const TrainerSessionHome = () => {
               <Row justify="center"><Title level={3}>Lunes</Title></Row>
               <List
                 itemLayout="horizontal"
-                dataSource={data}
+                dataSource={dataDos}
                 renderItem={item => {
                   let color = "white";
                   let name = "";
@@ -286,7 +335,7 @@ const TrainerSessionHome = () => {
               <Row justify="center"><Title level={3}>Lunes</Title></Row>
               <List
                 itemLayout="horizontal"
-                dataSource={data}
+                dataSource={dataDos}
                 renderItem={item => {
                   let color = "white";
                   let name = "";
