@@ -25,20 +25,20 @@ const RegisterForm = (props) => {
                 size={'medium'}
             >
                 <Form.Item
-                    label="Correo"
+                    label="Correo:"
                     name="Email"
                     rules={[{ required: true, type: 'email', message: 'Por favor ingrese un correo valido' }]}
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
-                    label="Contraseña"
+                    label="Contraseña:"
                     name="Password"
                     rules={[{ required: true, message: 'Minimo 8 caracteres', min: 8 }]}
                 >
                     <Input.Password />
                 </Form.Item>
-                <Form.Item name="TypeID" label="Tipo" rules={[{ required: true }]}>
+                <Form.Item name="TypeID" label="Tipo:" rules={[{ required: true }]}>
                     <Select
                         placeholder="Seleccione el tipo de cuenta"
                     >

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import gql from 'graphql-tag';
-import { useApolloClient, useMutation, useQuery} from "@apollo/react-hooks";
+import { useApolloClient, useMutation, useQuery } from "@apollo/react-hooks";
 
 import { Form, Input, Button, InputNumber } from 'antd';
 
@@ -12,13 +12,30 @@ const GET_AUTH_DATA = gql`
 `
 
 const ASSIGN_PROFILE = gql`
-   mutation AssignProfile($token: String!, $name: String!, $city: String!, $telephone: String!, $age: Int!, $photo: String!){
+   mutation AssignProfile(
+    $token: String!, 
+    $name: String!, 
+    $city: String!, 
+    $telephone: String!, 
+    $age: Int!, 
+    $photo: String!, 
+    $sum_ratings: Int, 
+    $num_ratings: Int,
+    $description: String,
+    $work_experience: String,
+    $resources: String
+    ){
     createProfile(token: $token, body: {
       name: $name,
       city: $city,
       telephone: $telephone,
       age: $age,
-      photo: $photo
+      photo: $photo,
+      sum_ratings: $sum_ratings,
+      num_ratings:$num_ratings,
+      description: $description,
+      work_experience: $work_experience,
+      resources: $resources
     })
   }
 `;
@@ -32,14 +49,21 @@ const AssignProfileForm = () => {
 
   const onSubmitValidate = async values => {
     try {
-      await AssignProfile({ variables: { 
-        token: cache.token,
-        name: values.name,
-        city: values.city,
-        telephone: values.telephone,
-        age: values.age,
-        photo: 'none'
-      } });
+      await AssignProfile({
+        variables: {
+          token: cache.token,
+          name: values.name,
+          city: values.city,
+          telephone: values.telephone,
+          age: values.age,
+          photo: 'none',
+          sum_ratings: 0,
+          num_ratings: 0,
+          description: values.description,
+          work_experience: values.work_experience,
+          resources: values.resources
+        }
+      });
     } catch (e) { }
   };
 
@@ -63,7 +87,7 @@ const AssignProfileForm = () => {
         initialValues={{ remember: true }}
         onFinish={onSubmitValidate}
         layout={'vertical'}
-        size={'medium'}
+        size={'small'}
       >
         <Form.Item
           label="Nombre"
@@ -92,6 +116,27 @@ const AssignProfileForm = () => {
           rules={[{ required: true, type: 'number', message: 'Por favor ingrese una edad válida', min: 10, max: 120 }]}
         >
           <InputNumber />
+        </Form.Item>
+        <Form.Item
+          label="Descripción:"
+          name="description"
+          rules={[{ required: true, message: 'Por favor ingrese una descripción' }]}
+        >
+          <Input.TextArea />
+        </Form.Item>
+        <Form.Item
+          label="Experiencia laboral:"
+          name="work_experience"
+          rules={[{ required: true, message: 'Por favor ingrese su experiencia laboral' }]}
+        >
+          <Input.TextArea />
+        </Form.Item>
+        <Form.Item
+          label="Recursos:"
+          name="resources"
+          rules={[{ required: true, message: 'Por favor ingrese sus recursos' }]}
+        >
+          <Input.TextArea />
         </Form.Item>
         <br />
         <Form.Item >

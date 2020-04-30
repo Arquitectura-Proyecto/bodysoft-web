@@ -1,6 +1,6 @@
 import React from 'react';
 
-import box from '../../../../shared/images/Boxer.jpg'
+import box from '../../../../shared/images/box.webp';
 
 import BlankNavBar from '../../../../shared/components/BlankNavBar';
 import AssignProfileForm from '../components/AssignProfileForm';
@@ -20,7 +20,7 @@ const UserAddProfile = () => {
           </div>
           <div className="row justify-content-center">
             <div className="col-12 col-md-6">
-              <div className="card" style={{padding: "9%"}}>
+              <div className="card text-center" style={{padding: "9%"}}>
                 <AssignProfileForm />
               </div>
             </div>
