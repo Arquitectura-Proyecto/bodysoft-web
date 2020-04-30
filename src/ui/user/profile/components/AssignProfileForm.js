@@ -1,18 +1,59 @@
 import React from 'react';
 
-import { useApolloClient } from "@apollo/react-hooks";
+import gql from 'graphql-tag';
+import { useApolloClient, useMutation, useQuery} from "@apollo/react-hooks";
 
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, InputNumber } from 'antd';
+
+const GET_AUTH_DATA = gql`
+    query getAuthData {
+        token @client
+    }
+`
+
+const ASSIGN_PROFILE = gql`
+   mutation AssignProfile($token: String!, $name: String!, $city: String!, $telephone: String!, $age: Int!, $photo: String!){
+    createProfile(token: $token, body: {
+      name: $name,
+      city: $city,
+      telephone: $telephone,
+      age: $age,
+      photo: $photo
+    })
+  }
+`;
 
 const AssignProfileForm = () => {
 
   const client = useApolloClient();
 
+  const { data: cache } = useQuery(GET_AUTH_DATA);
+  const [AssignProfile, { data, loading, error }] = useMutation(ASSIGN_PROFILE, { errorPolicy: 'all' });
+
   const onSubmitValidate = async values => {
     try {
-      client.writeData({ data: { profile: true } });
+      await AssignProfile({ variables: { 
+        token: cache.token,
+        name: values.name,
+        city: values.city,
+        telephone: values.telephone,
+        age: values.age,
+        photo: 'none'
+      } });
     } catch (e) { }
   };
+
+  if (loading) {
+    return (
+      <div className="spinner-border text-warning" role="status">
+        <span className="sr-only">Loading...</span>
+      </div>
+    );
+  }
+
+  if (data) {
+    client.writeData({ data: { profile: true } });
+  }
 
   return (
     <>
@@ -26,52 +67,32 @@ const AssignProfileForm = () => {
         <Form.Item
           label="Nombre"
           name="name"
-          rules={[{ required: true, message: 'Por favor ingrese un correo valido' }]}
+          rules={[{ required: true, message: 'Por favor ingrese un nombre' }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          label="Edad"
-          name="age"
-          rules={[{ required: true, message: 'Por favor ingrese un correo valido' }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Telefono"
-          name="telephone"
-          rules={[{ required: true, message: 'Por favor ingrese un correo valido' }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Ciudad"
+          label="Ciudad:"
           name="city"
-          rules={[{ required: true, message: 'Por favor ingrese un correo valido' }]}
+          rules={[{ required: true, message: 'Por favor ingrese una ciudad válida' }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          label="Descripcion"
-          name="description"
-          rules={[{ required: true, message: 'Por favor ingrese un correo valido' }]}
+          label="Telefono:"
+          name="telephone"
+          rules={[{ required: true, message: 'Por favor ingrese un telefono valido' }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          label="Experiencia"
-          name="work_experience"
-          rules={[{ required: true, message: 'Por favor ingrese un correo valido' }]}
+          label="Edad:"
+          name="age"
+          rules={[{ required: true, type: 'number', message: 'Por favor ingrese una edad válida', min: 10, max: 120 }]}
         >
-          <Input />
+          <InputNumber />
         </Form.Item>
-        <Form.Item
-          label="Recursos"
-          name="resources"
-          rules={[{ required: true, message: 'Por favor ingrese un correo valido' }]}
-        >
-          <Input />
-        </Form.Item>
+        <br />
         <Form.Item >
           <Button
             type="primary"
@@ -83,6 +104,11 @@ const AssignProfileForm = () => {
             </Button>
         </Form.Item>
       </Form>
+      {(error) &&
+        <div className="alert alert-danger m-0" role="alert">
+          {error.message.substring(19)}
+        </div>
+      }
     </>
   )
 }

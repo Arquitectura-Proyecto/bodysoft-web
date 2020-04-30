@@ -88,14 +88,14 @@ const LoginForm = (props) => {
                 size={'large'}
             >
                 <Form.Item
-                    label="Correo"
+                    label="Correo:"
                     name="Email"
                     rules={[{ required: true, type: 'email', message: 'Por favor ingrese un correo valido' }]}
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
-                    label="Contraseña"
+                    label="Contraseña:"
                     name="Password"
                     rules={[{ required: true, message: 'Ingrese una contraseña' }]}
                 >
