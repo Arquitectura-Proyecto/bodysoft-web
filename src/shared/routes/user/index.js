@@ -2,10 +2,12 @@ import React from 'react';
 
 import { Switch, Route, Redirect } from 'react-router-dom';
 
-import UserHomePage from "../../../ui/user/home/pages/UserHomePage";
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
+
+import UserHomePage from "../../../ui/user/home/UserHomePage";
 import UserAddProfile from '../../../ui/user/profile/pages/UserAddProfile';
+import UserProfilePage from '../../../ui/user/profile/pages/UserProfilePage';
 import Navbar from "../../../ui/trainer/navbar/pages/Navbar";
 
 const GET_AUTH_DATA = gql`
@@ -26,6 +28,7 @@ function UserSwitch() {
                 <Route path='/' > <Navbar /> </Route>
                 <Switch>
                     <Route exact path='/'> <UserHomePage /> </Route>
+                    <Route exact path='/profile'> <UserProfilePage /> </Route>
                     <Redirect to="/" />
                 </Switch>
             </>
