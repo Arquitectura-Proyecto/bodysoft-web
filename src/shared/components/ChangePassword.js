@@ -62,7 +62,7 @@ const ChangePassword = (props) => {
                         initialValues={props.userData}
                         onFinish={onSubmitValidate}
                         layout={'vertical'}
-                        size={'small'}
+                        size={'medium'}
                     >
                         <Form.Item
                             label="Contraseña Actual:"
