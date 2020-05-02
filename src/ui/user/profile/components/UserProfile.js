@@ -37,7 +37,9 @@ const UserProfile = (props) => {
         <h4>{props.userData.telephone}</h4>
         <p className="mb-1">Ciudad:</p>
         <h4>{props.userData.city}</h4>
-        <button className="btn btn-warning btn-sm mb-0" onClick={() => { props.goToChangeProfile() }}>Editar</button>
+        <div className="d-flex justify-content-end">
+          <button className="btn btn-warning btn-sm mb-0" onClick={() => { props.goToEditProfile() }}>Editar</button>
+        </div>
       </div>
     </div>
   )

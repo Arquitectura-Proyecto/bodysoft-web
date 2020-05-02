@@ -15,7 +15,7 @@ const CHANGE_PASSWORD = gql`
   }
 `;
 
-const UserEditProfile = (props) => {
+const ChangePassword = (props) => {
 
     const [isSuccesfull, setIsSuccesfull] = useState(false);
     const [UpdateProfile, { loading, error }] = useMutation(CHANGE_PASSWORD, { errorPolicy: 'all' });
@@ -88,7 +88,7 @@ const UserEditProfile = (props) => {
                             </Button>
                         </Form.Item>
                     </Form>
-                    <button className="btn btn-link FontBlackLink mb-0" onClick={() => { props.goToChangeProfile() }}>Volver</button>
+                    <button className="btn btn-link FontBlackLink mb-0" onClick={() => { props.goToEditProfile() }}>Volver</button>
                     {message}
                     {(error) &&
                         <div className="alert alert-danger" role="alert">
@@ -101,4 +101,4 @@ const UserEditProfile = (props) => {
     )
 }
 
-export default UserEditProfile;
+export default ChangePassword;

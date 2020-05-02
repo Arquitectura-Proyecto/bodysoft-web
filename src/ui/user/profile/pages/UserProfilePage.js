@@ -7,7 +7,7 @@ import { useQuery, useLazyQuery } from "@apollo/react-hooks";
 
 import UserProfile from '../components/UserProfile';
 import UserEditProfile from '../components/UserEditProfile';
-import UserChangePass from '../components/UserChangePass';
+import ChangePassWord from '../../../../shared/components/ChangePassword';
 
 
 const GET_AUTH_DATA = gql`
@@ -40,7 +40,7 @@ const UserProfilePage = () => {
     setPageState('profile');
   }
 
-  const goToChangeProfile = () => {
+  const goToEditProfile = () => {
     setPageState('edit');
   }
 
@@ -81,7 +81,7 @@ const UserProfilePage = () => {
   switch (pageState) {
     case 'profile':
       content = <UserProfile
-        goToChangeProfile={goToChangeProfile}
+        goToEditProfile={goToEditProfile}
         userData={userData}
       />
       break;
@@ -95,9 +95,9 @@ const UserProfilePage = () => {
       />
       break;
     case 'pass':
-      content = <UserChangePass
+      content = <ChangePassWord
         token={cache.token}
-        goToChangeProfile={goToChangeProfile}
+        goToEditProfile={goToEditProfile}
       />
       break;
     default:
