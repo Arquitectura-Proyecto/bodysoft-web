@@ -9,7 +9,7 @@ const GET_AUTH_DATA = gql`
     query getAuthData {
         token @client
     }
-`
+`;
 
 const ASSIGN_PROFILE = gql`
    mutation AssignProfile($token: String!, $name: String!, $city: String!, $telephone: String!, $age: Int!, $photo: String!){
