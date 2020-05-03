@@ -51,8 +51,8 @@ const TrainerProfilePage = () => {
   const [degreesData, setDegreesData] = useState(null);
 
   const { data: cache } = useQuery(GET_AUTH_DATA);
-  const [getProfile, { loading, error, data, called }] = useLazyQuery(GET_PROFILE);
-  const [getDegrees, { loading: loading2, error: error2, data: degrees, called: called2 }] = useLazyQuery(GET_DEGREES);
+  const { loading, error, data } = useQuery(GET_PROFILE, { variables: { token: cache.token } });
+  const { loading: loading2, error: error2, data: degrees } = useQuery(GET_DEGREES, { variables: { token: cache.token } });
 
   const goToProfile = () => {
     setPageState('profile');
@@ -81,13 +81,8 @@ const TrainerProfilePage = () => {
   const changedSpeciality = (data) => {
     let specialities = trainerData.specialities
     specialities.push(data)
-    setTrainerData({...trainerData, specialities: specialities});
+    setTrainerData({ ...trainerData, specialities: specialities });
     setPageState('profile');
-  }
-
-  if (cache && !called && !called2) {
-    getProfile({ variables: { token: cache.token } });
-    getDegrees({ variables: { token: cache.token } })
   }
 
   if (data && !trainerData) {

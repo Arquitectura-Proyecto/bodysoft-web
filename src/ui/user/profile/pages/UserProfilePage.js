@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import box from '../../../../shared/images/box.webp';
 
 import gql from 'graphql-tag';
-import { useQuery, useLazyQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/react-hooks";
 
 import UserProfile from '../components/UserProfile';
 import UserEditProfile from '../components/UserEditProfile';
@@ -34,7 +34,7 @@ const UserProfilePage = () => {
   const [userData, setUserData] = useState(null);
 
   const { data: cache } = useQuery(GET_AUTH_DATA);
-  const [getProfile, { loading, error, data, called }] = useLazyQuery(GET_PROFILE);
+  const { loading, error, data } = useQuery(GET_PROFILE, { variables: { token: cache.token } });
 
   const goToProfile = () => {
     setPageState('profile');
@@ -51,10 +51,6 @@ const UserProfilePage = () => {
   const changedProfile = (data) => {
     setUserData(data);
     setPageState('profile');
-  }
-
-  if (cache && !called) {
-    getProfile({ variables: { token: cache.token } });
   }
 
   if (data && !userData) {
