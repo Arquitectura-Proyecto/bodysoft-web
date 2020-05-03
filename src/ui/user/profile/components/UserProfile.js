@@ -28,8 +28,8 @@ const UserProfile = (props) => {
         <img className="img-fluid d-inline d-md-none mb-5" src={src} alt={props.userData.user_name} style={{ width: "150px" }} />
         <img className="img-fluid d-none d-md-inline" src={src} alt={props.userData.user_name} style={{ height: "100%" }} />
       </div>
-      <div className="col-12 col-md-4 Background p-5">
-        <h3 className="FontMaincolor mt-0">{props.userData.user_name}</h3>
+      <div className="col-12 col-md-4 WhiteColor p-5">
+        <h3 className="FontDarkMainColor mt-0">{props.userData.user_name}</h3>
         <hr />
         <p className="mb-1">Edad:</p>
         <h4>{props.userData.age}</h4>
