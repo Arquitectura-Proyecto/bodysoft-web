@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 import box from '../../../../shared/images/box.webp';
 
 import gql from 'graphql-tag';
-import { useQuery, useLazyQuery } from "@apollo/react-hooks";
-
+import { useQuery } from "@apollo/react-hooks";
 import TrainerProfile from '../components/TrainerProfile';
 import TrainerEditProfile from '../components/TrainerEditProfile';
 import ChangePassWord from '../../../../shared/components/ChangePassword';
