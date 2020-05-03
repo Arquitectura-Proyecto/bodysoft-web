@@ -38,8 +38,8 @@ const TrainerProfile = (props) => {
               <h5 className="card-text">{props.trainerData.age}</h5>
             </div>
           </div>
-          <div className="WhiteColor border p-3  d-flex justify-content-center my-4">
-            <button className="btn btn-warning btn" onClick={() => { props.goToEditProfile() }}>Editar Perfil</button>
+          <div className="d-flex justify-content-center my-4">
+            <button className="btn btn-warning btn-lg" onClick={() => { props.goToEditProfile() }}>Editar Perfil</button>
           </div>
         </div>
         <div className="col-12 col-md-5">
