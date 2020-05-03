@@ -27,6 +27,7 @@ const GET_TRAINERS = gql`
 }
 `
 
+
 const UserSessionHome = () => {
 
   const { data, error, loading } = useQuery(GET_TRAINERS);
@@ -51,20 +52,6 @@ const UserSessionHome = () => {
       return trainer;
     }
   )
-
-  const listData = [];
-
-  for (let i = 0; i < 23; i++) {
-    listData.push({
-      href: 'http://ant.design',
-      title: `Frank Zane`,
-      avatar: 'https://www.frankzane.com/wp-content/uploads/Frank-Home-04-450x450.jpg',
-      description:
-        'Bodybuilder, Crosfit, Strongman',
-      content:
-        'Esta es la descripcion del entrenador, esta es la descripcion del entrenador,esta es la descripcion del entrenador,esta es la descripcion del entrenador,esta es la descripcion del entrenadoresta es la descripcion del entrenador,esta es la descripcion del entrenador,esta es la descripcion del entrenador.',
-    });
-  }
 
   const IconText = ({ icon, text }) => (
     <Space>
@@ -115,7 +102,7 @@ const UserSessionHome = () => {
                       <IconText icon={HomeOutlined} text={item.city} key="list-vertical-star-o" />,
                     ]}
                     
-                    onClick={()=>history.push('/profile/'+item.trainer_id)}
+                    onClick={()=>history.push('/session/'+item.trainer_id)}
 
                     style={{cursor:"pointer"}}
 
@@ -148,3 +135,7 @@ const UserSessionHome = () => {
 }
 
 export default UserSessionHome;
+
+
+
+
