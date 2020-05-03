@@ -49,7 +49,7 @@ const AddSpecialitiesForm = (props) => {
                 <Form.Item
                     name="speciality"
                     label="Especialidad:"
-                    rules={[{ required: true }]}>
+                    rules={[{ required: true, message: 'Seleccione una especialidad' }]}>
                     <Select
                         placeholder="Especialidades"
                     >

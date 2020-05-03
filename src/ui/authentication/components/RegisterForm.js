@@ -5,14 +5,14 @@ import icon_dumbbell from '../../../shared/images/icon_dumbbell.webp';
 import { Form, Input, Button, Select } from 'antd';
 
 const RegisterForm = (props) => {
-    
+
     const types = [];
     const { Option } = Select;
     props.data.authGetTypes.map((data) => {
         types.push(<Option key={data.ID} value={data.ID}>{data.Name}</Option>)
         return null;
     });
-    
+
     return (
         <>
             <h1 className="TitleFontTypeRoboto mb-0">Crear Cuenta</h1>
@@ -38,7 +38,10 @@ const RegisterForm = (props) => {
                 >
                     <Input.Password />
                 </Form.Item>
-                <Form.Item name="TypeID" label="Tipo:" rules={[{ required: true }]}>
+                <Form.Item
+                    name="TypeID"
+                    label="Tipo:"
+                    rules={[{ required: true, message: 'Seleccione un tipo' }]}>
                     <Select
                         placeholder="Seleccione el tipo de cuenta"
                     >

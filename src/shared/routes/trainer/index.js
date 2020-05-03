@@ -9,6 +9,7 @@ import TrainerHomePage from "../../../ui/trainer/home/TrainerHomePage";
 import TrainerAddProfile from "../../../ui/trainer/profile/pages/TrainerAddProfile";
 import TrainerSessionHome from '../../../ui/trainer/sessions/pages/TrainerSessionHome';
 import TrainerProfilePage from '../../../ui/trainer/profile/pages/TrainerProfilePage';
+import TrainerRoutinesHome from '../../../ui/trainer/routines/pages/TrainerRoutinesHome';
 import Navbar from "../../../ui/trainer/navbar/pages/Navbar";
 
 const GET_AUTH_DATA = gql`
@@ -31,6 +32,7 @@ function TrainerSwitch() {
                     <Route exact path='/'> <TrainerHomePage /> </Route>
                     <Route exact path='/session'> <TrainerSessionHome /> </Route>
                     <Route exact path='/profile'> <TrainerProfilePage /> </Route>
+                    <Route exact path='/routines'> <TrainerRoutinesHome /> </Route>
                     <Redirect to="/" />
                 </Switch>
             </>
