@@ -6,8 +6,8 @@ import { useQuery } from '@apollo/react-hooks';
 import { Form, Button, Select } from 'antd';
 
 const GET_SPECIALITIES = gql`
-  {
-    profileSpecialities{
+query AddDegree($token: String!){
+    profileToAddSpecialitities(token: $token){
         speciality_id
         speciality_name
       }
@@ -16,14 +16,14 @@ const GET_SPECIALITIES = gql`
 
 const AddSpecialitiesForm = (props) => {
 
-    const { loading, error, data } = useQuery(GET_SPECIALITIES);
+    const { loading, error, data } = useQuery(GET_SPECIALITIES, { variables: { token: props.token } });
 
     const types = [];
 
     const { Option } = Select;
 
     if (data) {
-        data.profileSpecialities.map((data) => {
+        data.profileToAddSpecialitities.map((data) => {
             const value = data.speciality_id + '|' + data.speciality_name;
             types.push(<Option key={data.speciality_id} value={value}> {data.speciality_name}</Option >)
             return null;
