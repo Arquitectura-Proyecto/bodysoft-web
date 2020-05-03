@@ -27,19 +27,32 @@ const GET_PROFILE = gql`
       description,
       specialities,
       resources,
+      work_experience,
       sum_ratings,
       num_ratings
     }
   }
 `;
 
+const GET_DEGREES = gql`
+query GetProfile($token: String!){
+  profileDegreesByTrainers(token: $token){
+    degree_name,
+    year,
+    institution
+  }
+}
+`
+
 const TrainerProfilePage = () => {
 
   const [pageState, setPageState] = useState('profile');
   const [trainerData, setTrainerData] = useState(null);
+  const [degreesData, setDegreesData] = useState(null);
 
   const { data: cache } = useQuery(GET_AUTH_DATA);
   const [getProfile, { loading, error, data, called }] = useLazyQuery(GET_PROFILE);
+  const [getDegrees, { loading: loading2, error: error2, data: degrees, called: called2 }] = useLazyQuery(GET_DEGREES);
 
   const goToProfile = () => {
     setPageState('profile');
@@ -58,15 +71,34 @@ const TrainerProfilePage = () => {
     setPageState('profile');
   }
 
-  if (cache && !called) {
+  const changedDegree = (data) => {
+    let degress = degreesData
+    degress.push(data)
+    setDegreesData(degress);
+    setPageState('profile');
+  }
+
+  const changedSpeciality = (data) => {
+    let specialities = trainerData.specialities
+    specialities.push(data)
+    setTrainerData({...trainerData, specialities: specialities});
+    setPageState('profile');
+  }
+
+  if (cache && !called && !called2) {
     getProfile({ variables: { token: cache.token } });
+    getDegrees({ variables: { token: cache.token } })
   }
 
   if (data && !trainerData) {
     setTrainerData(data.profileTrainer);
   }
 
-  if (loading) {
+  if (degrees && !degreesData) {
+    setDegreesData(degrees.profileDegreesByTrainers);
+  }
+
+  if (loading || loading2) {
     return (
       <div className="spinner-border text-warning" role="status">
         <span className="sr-only">Loading...</span>
@@ -82,22 +114,33 @@ const TrainerProfilePage = () => {
     );
   }
 
+  if (error2) {
+    return (
+      <div className="alert alert-danger m-0" role="alert">
+        {error2.message}
+      </div>
+    );
+  }
+
   switch (pageState) {
     case 'profile':
       return (
         <TrainerProfile
           goToEditProfile={goToEditProfile}
           trainerData={trainerData}
+          degreesData={degreesData}
         />
       );
     case 'edit':
       return (
         <TrainerEditProfile
-          userData={trainerData}
+          trainerData={trainerData}
           token={cache.token}
           goToProfile={goToProfile}
-          changedProfile={changedProfile}
           goToChangePass={goToChangePass}
+          changedProfile={changedProfile}
+          changedDegree={changedDegree}
+          changedSpeciality={changedSpeciality}
         />
       );
     case 'pass':
