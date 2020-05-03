@@ -4,19 +4,14 @@ import '../../../../shared/css/colors.css'
 import '../css/trainerSession.css'
 import '../css/cards.css'
 import 'antd/dist/antd.css';
-import { Typography, Row, Col, Divider, List, Avatar, message, Popover, Button, Layout, Menu, Switch, Card, Form, Input, InputNumber } from 'antd';
+import { Typography, Row, Col, List, Popover, Button, Card } from 'antd';
 
-import whitelogo from '../../../../shared/images/whitelogo.webp';
 
-import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
 import { gql } from 'apollo-boost';
-import { useQuery, useApolloClient, useMutation } from '@apollo/react-hooks';
-import client from '../../../../apollo/client';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 const { Title, } = Typography;
 
-const { Header, Content, Sider } = Layout;
 
-const { SubMenu } = Menu;
 
 const GET_SESSIONS = gql`
   query GetSessions($Token:String!){
@@ -86,14 +81,12 @@ const TrainerSessionHome = () => {
   const token = useQuery(GET_TOKEN).data.token;
   console.log('token', token)
 
-  const { data, error, loading } = useQuery(GET_SESSIONS, { variables: { Token: token } });
+  let { data, error, loading } = useQuery(GET_SESSIONS, { variables: { Token: token } });
 
   const [dibujar, setDibujar] = useState(null);
 
   //console.log('data', data);
   //console.log('error', error);
-
-
 
   //console.log("DIBUJAAAAAAAAA", dibujar)
 
@@ -112,16 +105,18 @@ const TrainerSessionHome = () => {
   return (
     <>
       {dibujar}
+      <Row><br/></Row>
       <Row justify="center">
         <Col>
           <h1 className="TitleFontTypeRoboto mb-0">Tus sesiones</h1>
         </Col>
       </Row>
-      <Row justify="center">
+      <Row><br/></Row>
+      <Row justify="center" >
         <Col xs={23}>
           <Row justify="center"
             style={{ //height: "500px", overflow: "auto", 
-              border: "1px solid #e8e8e8", borderRadius: "4px", padding: "8px 24px"
+              border: "1px solid #e8e8e8", borderRadius: "4px", padding: "8px 24px",backgroundColor:"white"
             }}
           >
             <Col xs={3}>
@@ -172,7 +167,7 @@ const dateFormatYYYMMDD = (today) => {
 const DaysCalendar = ({ sessions, onClickHour }) => {
 
   //console.log("DAYCALENDAR", sessions)
-
+/*
   sessions.getAllbyId.map(session => {
     //console.log(session);
     //session.hour = session.iniTime.substring(0, 2);
@@ -180,7 +175,7 @@ const DaysCalendar = ({ sessions, onClickHour }) => {
     //session.dateNumber = session.daySession + "-" + session.iniTime.substring(0, 2);
     return session;
   })
-
+*/
 
   let day1 = new Date();
   let day2 = new Date();
@@ -488,7 +483,7 @@ const DayComponent = ({ dayNumber, name, hours, onClickHour }) => {
                 color = "white";
                 card = <CardFree onClickExit={() => onClickHour(null)} name={name} hourSession={item} />;
                 cursor = "pointer";
-                nameStatus = "Libre";
+                //nameStatus = "Libre";
                 break;
             }
 
@@ -552,7 +547,7 @@ const CardFree = ({ name, onClickExit, hourSession }) => {
     endTime: endTime
   }
 
-  const [registerSchedules, { data, error }] = useMutation(
+  const [registerSchedules] = useMutation(
     CREATE_SESSION,
     {
       update(cache, { data: { registerSchedules } }) {
@@ -618,7 +613,7 @@ const CardAvailable = ({ name, onClickExit, hourSession }) => {
 
   const token = useQuery(GET_TOKEN).data.token;
 
-  const { iniTime, daySession, endTime } = hourSession;
+  const { iniTime } = hourSession;
 
   console.log("id_schedule", hourSession.id_schedule)
 
@@ -627,7 +622,7 @@ const CardAvailable = ({ name, onClickExit, hourSession }) => {
     schedule: hourSession.id_schedule
   }
 
-  const [deleteSchedules, { data, error }] = useMutation(
+  const [deleteSchedules] = useMutation(
     DELETE_SESSION,
     {
       update(cache) {
@@ -694,7 +689,7 @@ const CardTaken = ({ name, onClickExit, hourSession }) => {
 
   const token = useQuery(GET_TOKEN).data.token;
 
-  const { iniTime, daySession, endTime } = hourSession;
+  const { iniTime } = hourSession;
 
   console.log("id_schedule", hourSession.id_schedule)
 
@@ -703,7 +698,7 @@ const CardTaken = ({ name, onClickExit, hourSession }) => {
     schedule: hourSession.id_schedule
   }
 
-  const [deleteSchedules, { data, error }] = useMutation(
+  const [deleteSchedules] = useMutation(
     DELETE_TAKEN_SESSION,
     {
       update(cache) {
