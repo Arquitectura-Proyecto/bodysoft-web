@@ -45,6 +45,7 @@ const SelectRoutineByIdForm = (props) => {
     const { Option } = Select;
 
     if (data) {
+        types.push(<Option key={0} value={0}>Sin filtro</Option >)
         data.getAllTypeRoutine.map((data) => {
             types.push(<Option key={data.id} value={data.id}> {data.name}</Option >)
             return null;
