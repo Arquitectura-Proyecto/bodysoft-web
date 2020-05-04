@@ -8,7 +8,7 @@ import { gql } from 'apollo-boost';
 import UserHomePage from "../../../ui/user/home/UserHomePage";
 import UserAddProfile from '../../../ui/user/profile/pages/UserAddProfile';
 import UserProfilePage from '../../../ui/user/profile/pages/UserProfilePage';
-import UserRoutinesHome from '../../../ui/user/routines/pages/UserRoutinesHome';
+import UserRoutinesHomePage from '../../../ui/user/routines/pages/UserRoutinesHomePage';
 import Navbar from "../../../ui/trainer/navbar/pages/Navbar";
 import UserSessionHome from '../../../ui/user/sessions/pages/UserSessionHome';
 import UserSessionTrainer from '../../../ui/user/sessions/pages/UserSessionTrainer';
@@ -34,7 +34,7 @@ function UserSwitch() {
                     <Route exact path='/profile'> <UserProfilePage /> </Route>
                     <Route exact path='/session/:id'> <UserSessionTrainer/> </Route>
                     <Route exact path='/session'> <UserSessionHome/> </Route>
-                    <Route exact path='/routines'> <UserRoutinesHome /> </Route>
+                    <Route exact path='/routines'> <UserRoutinesHomePage /> </Route>
                     <Redirect to="/" />
                 </Switch>
             </>

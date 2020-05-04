@@ -166,6 +166,7 @@ const TrainerEditProfile = (props) => {
                     <div className="WhiteColor border p-4 mb-3">
                         <h3>Añadir especialidad</h3>
                         <AddSpecialities
+                            token={props.token}
                             onSubmitSpeciality={onSubmitSpeciality}
                         />
                         {(error3) &&
