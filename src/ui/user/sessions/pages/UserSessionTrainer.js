@@ -33,11 +33,47 @@ query getUserSessionsCoach($token:String!, $coach:Int!){
 }
 `
 
+const GET_SESSIONS_USER = gql`
+query getSessionsUser($token:String!){
+  getCurrentbyId(Token: $token){
+    id_schedule
+    idCoach
+    daySession
+    iniTime
+    endTime
+    status {
+      id
+      nameStatus
+    }
+    idUser
+  }
+}
+`
+
 const CREATE_USER_SESSION = gql`
 mutation createUserSession($token:String!,$schedule:Int!){
   setAdates(ChangeStatus:{ token: $token,
     schedule:$schedule
   })
+}
+`
+
+const GET_PROFILE_TRAINER = gql`
+query getProfileTrainer($idTrainer:ID!){
+  profileTrainerById(idTrainer: $idTrainer){
+    trainer_id
+    trainer_name
+    age
+    photo
+    telephone
+    city
+    sum_ratings
+    num_ratings
+    description
+    work_experience
+    resources
+    specialities
+  }
 }
 `
 
@@ -53,15 +89,19 @@ const UserSessionTrainer = () => {
 
   const { data, loading, error } = useQuery(GET_USER_SESSIONS_COACH, { variables: { token, coach: parseInt(id) } })
 
+  const { data: dataProfile, loading: loadingProfile, error: errorProfile } = useQuery(GET_PROFILE_TRAINER,{variables:{idTrainer:id}})
+
   const dayHours = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24']
 
   const [cardSession, setCardSession] = useState(null);
 
-  if (loading) {
+  if (loading || loadingProfile) {
     return <div>loading...</div>
   }
 
-  if (error) {
+  if (error || errorProfile) {
+    console.log("error",error)
+    console.log("errorProfile",errorProfile)
     return <div>error</div>
   }
 
@@ -70,13 +110,19 @@ const UserSessionTrainer = () => {
       {React.createElement(icon)}
       {text}
     </Space>
-  );
+  );  
 
-  const trainers = [];
+  const profile = dataProfile.profileTrainerById;
+
+  profile.photo='https://www.frankzane.com/wp-content/uploads/Frank-Home-04-450x450.jpg';
+
+  console.log("profileTrainerById",dataProfile.profileTrainerById);
+
+  const trainers = [profile];
 
   return (
     <>
-    {cardSession}
+      {cardSession}
       <Row><br /></Row>
       <Row justify="center">
         <Col>
@@ -93,7 +139,7 @@ const UserSessionTrainer = () => {
             }}
           >
             <Col >
-              <Row><Title level={3}>Entrenadores</Title><Divider style={{ margin: "0px" }} /></Row>
+              <Row><Title level={3}>Perfil del entrenador</Title><Divider style={{ margin: "0px" }} /></Row>
 
               <List
                 itemLayout="vertical"
@@ -111,10 +157,6 @@ const UserSessionTrainer = () => {
                       <IconText icon={PhoneOutlined} text={item.telephone} key="list-vertical-star-o" />,
                       <IconText icon={HomeOutlined} text={item.city} key="list-vertical-star-o" />,
                     ]}
-                    
-                    onClick={()=>history.push('/session/'+item.trainer_id)}
-
-                    style={{cursor:"pointer"}}
 
                   >
                     <List.Item.Meta
@@ -126,7 +168,7 @@ const UserSessionTrainer = () => {
                             item.specialities.map(
                               speciality => <React.Fragment key={speciality}>{speciality} </React.Fragment>
                             )
-                            }</div>
+                          }</div>
                         </>
                       }
                     />
@@ -139,7 +181,8 @@ const UserSessionTrainer = () => {
           </Row>
         </Col>
       </Row>
-
+      <Row><br /></Row>
+      <Row><br /></Row>
       <Row justify="center" >
         <Col xs={23}>
           <Row justify="center"
@@ -168,7 +211,7 @@ const UserSessionTrainer = () => {
                 )}
               />
             </Col>
-            <DaysCalendar sessions={data.getAllbyCoachAvaibles} onClickHour={(e) => {setCardSession(e)}} />
+            <DaysCalendar sessions={data.getAllbyCoachAvaibles} onClickHour={(e) => { setCardSession(e) }} />
           </Row>
         </Col>
       </Row>
@@ -557,13 +600,15 @@ const CardAvailable = ({ name, onClickExit, hourSession }) => {
 
   const token = useQuery(GET_TOKEN).data.token;
 
+  const { data: dataSesssion, error: errorSession, loading: loadingSesssion} = useQuery(GET_SESSIONS_USER,{variables:{token}});
+
   const { iniTime, daySession, endTime } = hourSession;
 
   const { id } = useParams();
 
-  const variables={
-    token:token,
-    schedule:hourSession.id_schedule
+  const variables = {
+    token: token,
+    schedule: hourSession.id_schedule
   }
 
   const [registerSchedules] = useMutation(
@@ -573,16 +618,25 @@ const CardAvailable = ({ name, onClickExit, hourSession }) => {
         const { getAllbyCoachAvaibles } = cache.readQuery({ query: GET_USER_SESSIONS_COACH, variables: { token: token, coach: parseInt(id) } });
         cache.writeQuery({
           query: GET_USER_SESSIONS_COACH, variables: { token: token, coach: parseInt(id) },
-          data: { getAllbyCoachAvaibles: getAllbyCoachAvaibles.filter(session=> session.id_schedule !== hourSession.id_schedule)},
+          data: { getAllbyCoachAvaibles: getAllbyCoachAvaibles.filter(session => session.id_schedule !== hourSession.id_schedule) },
         })
       }
-    }
+      ,refetchQueries:[{query:GET_SESSIONS_USER,variables:{token}}]
+    },
   )
+
+  if(errorSession){
+    return <div>error</div>
+  }
+
+  if(loadingSesssion){
+    return <div>loading</div>
+  }
 
   return (
     <>
       <div className="maincard" style={{ backgroundColor: "white", borderRadius: "4px" }}>
-        <Card title={<><h3 style={{marginBottom:"5px"}}>Tomar esta sesión</h3></>} bordered={false}>
+        <Card title={<><h3 style={{ marginBottom: "5px" }}>Tomar esta sesión</h3></>} bordered={false}>
           <Row>
             <Col xs={12}>
               <h4>Dia:</h4>
@@ -610,7 +664,7 @@ const CardAvailable = ({ name, onClickExit, hourSession }) => {
                 <Button
                   style={{ backgroundColor: "#ffbc02", borderColor: "#e3a765", width: "100%", color: "#231F20" }}
                   onClick={() => {
-                    onClickExit(registerSchedules({variables}));
+                    onClickExit(registerSchedules({ variables }));
                   }}
                 >Crear</Button>
               </Row>

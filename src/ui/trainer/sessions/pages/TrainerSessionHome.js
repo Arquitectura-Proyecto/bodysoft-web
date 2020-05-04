@@ -703,6 +703,7 @@ const CardTaken = ({ name, onClickExit, hourSession }) => {
     {
       update(cache) {
         const { getAllbyId } = cache.readQuery({ query: GET_SESSIONS, variables: { Token: token } });
+        
         cache.writeQuery({
           query: GET_SESSIONS, variables: { Token: token },
           data: { getAllbyId: getAllbyId.filter(session => session.id_schedule !== hourSession.id_schedule) },
