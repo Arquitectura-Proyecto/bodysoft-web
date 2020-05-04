@@ -19,8 +19,12 @@ const RoutineCard = (props) => {
           <p className="pb-0 mb-1">Tipo:</p>
           <h6 className="card-title">{props.type}</h6>
           <div className="d-flex justify-content-end">
-            <button type="button" className="btn btn-secondary mr-2">Gestionar</button>
-            <button type="button" className="btn btn-warning">Recursos</button>
+            <button
+              type="button"
+              className="btn btn-warning"
+            >
+              Solicitar
+          </button>
           </div>
         </div>
       </div>
@@ -37,12 +41,10 @@ const GET_TYPES = gql`
 }
 `;
 
-
-const RoutinesHome = (props) => {
-
+const HomeRoutinesList = (props) => {
   const { loading, error, data } = useQuery(GET_TYPES);
 
-  if (!props.routinesData || loading) {
+  if (loading || !props.routinesList) {
     return (
       <div className="row justify-content-center">
         <div className="col-12 p-0 ">
@@ -68,8 +70,8 @@ const RoutinesHome = (props) => {
 
   let RoutinesList = [];
 
-  if (props.routinesData.length !== 0 && data) {
-    props.routinesData.map((routine, index) => {
+  if (props.routinesList.length !== 0 && data) {
+    props.routinesList.map((routine, index) => {
       data.getAllTypeRoutine.map(type => {
         if (type.id === routine.type.id) {
           RoutinesList.push(
@@ -90,19 +92,26 @@ const RoutinesHome = (props) => {
     });
   } else {
     return (
-      <div className="text-center m-5 p-5">
-        <div className="alert alert-dark" role="alert">
-          <h2>Usted actualmente no cuenta con rutinas creadas</h2>
+      <div className="row justify-content-center">
+        <div className="col-12">
+          <div className="alert alert-dark" role="alert">
+            <h2>No hay rutinas con el filtro actual</h2>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="row row-cols-1 row-cols-md-3">
-      {RoutinesList}
-    </div>
-  )
+    <>
+      <div className="d-flex justify-content-center">
+        <h1>Listado de rutinas</h1>
+      </div>
+      <div className="row row-cols-1 row-cols-md-3">
+        {RoutinesList}
+      </div>
+    </>
+  );
 }
 
-export default RoutinesHome;
+export default HomeRoutinesList;

@@ -75,10 +75,27 @@ const TrainerRoutinesHome = (props) => {
   switch (pageState) {
     case 'routines':
       return (
-        <RoutinesHome
-          routinesData={routinesData}
-          goToCreateRoutine={goToCreateRoutine}
-        />
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-12">
+              <div className="WhiteColor border p-4 m-4">
+                <h1>Tus rutinas</h1>
+                <hr/>
+                <button
+                  type="button"
+                  className="btn btn-warning"
+                  onClick={() => { goToCreateRoutine() }}
+                >
+                  Crear Rutina
+            </button>
+              </div>
+            </div>
+          </div>
+          <RoutinesHome
+            routinesData={routinesData}
+            goToCreateRoutine={goToCreateRoutine}
+          />
+        </div>
       );
     case 'create_routine':
       return (
