@@ -44,9 +44,9 @@ const RoutinesHome = (props) => {
 
   if (!props.routinesData || loading) {
     return (
-      <div className="row justify-content-center">
-        <div className="col-12 p-0 ">
-          <div className="spinner-border text-warning" role="status">
+      <div className="row justify-content-center text-center">
+        <div className="col-12 p-0 m-5">
+          <div className="spinner-border text-warning m-5" role="status">
             <span className="sr-only">Loading...</span>
           </div>
         </div>
