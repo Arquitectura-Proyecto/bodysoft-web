@@ -1,31 +1,10 @@
 import React, { useState } from 'react';
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import { Typography, Row, Col, List, Popover, Button, Card, Avatar, Space, Divider, Upload } from 'antd';
-
-import { MessageOutlined, LikeOutlined, StarOutlined, PhoneOutlined, HomeOutlined } from '@ant-design/icons';
-import { useHistory } from 'react-router-dom';
+import { Typography, Row, Col, List, Popover, Button, Card } from 'antd';
 
 const { Title, } = Typography;
 
-const GET_TRAINERS = gql`
-{
-  profileTrainers{
-    trainer_id
-    trainer_name
-    age
-    photo
-    telephone
-    city
-    sum_ratings
-    num_ratings
-    description
-    work_experience
-    resources
-    specialities
-  }
-}
-`
 const GET_SESSIONS_USER = gql`
 query getSessionsUser($token:String!){
   getCurrentbyId(Token: $token){
@@ -61,44 +40,25 @@ mutation cancelSessionUser($token:String!,$schedule:Int!){
 
 const UserSessionHome = () => {
 
-  const { data, error, loading } = useQuery(GET_TRAINERS);
-
   const token = useQuery(GET_TOKEN).data.token;
 
-  const { data: dataSesssion, error: errorSession, loading: loadingSesssion,refetch} = useQuery(GET_SESSIONS_USER,{variables:{token}});
-
-  const history = useHistory();
+  const { data: dataSesssion, error: errorSession, loading: loadingSesssion} = useQuery(GET_SESSIONS_USER,{variables:{token}});
 
   const [cardSession, setCardSession] = useState(null);
 
-  if (error || errorSession) {
+  if ( errorSession) {
     return <div>error</div>
   }
 
-  if (loading || loadingSesssion) {
+  if ( loadingSesssion) {
     return <div>loading...</div>
   }
 
-  const trainers = data.profileTrainers.map(
-    trainer => {
-      trainer.photo = 'https://www.frankzane.com/wp-content/uploads/Frank-Home-04-450x450.jpg'
-      return trainer;
-    }
-  )
-
   const dayHours = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24']
-
-  const IconText = ({ icon, text }) => (
-    <Space>
-      {React.createElement(icon)}
-      {text}
-    </Space>
-  );
-
   return (
     <>
-    <button onClick={()=>{refetch()}}>refetch</button>
     {cardSession}
+    <Row><br /></Row>
       <Row><br /></Row>
       <Row justify="center" >
         <Col xs={23}>
@@ -132,76 +92,12 @@ const UserSessionHome = () => {
           </Row>
         </Col>
       </Row>
-      <Row><br /></Row>
-      <Row justify="center">
-        <Col>
-          <h1 className="TitleFontTypeRoboto mb-0">Tus sesiones usuario</h1>
-        </Col>
-      </Row>
-      <Row><br /></Row>
-      <Row justify="center">
-        <Col xs={12}>
-          <Row justify="center"
-            style={{ //height: "500px", overflow: "auto", 
-              border: "1px solid #e8e8e8", borderRadius: "4px", padding: "8px 24px", backgroundColor: "white"
-            }}
-          >
-            <Col >
-              <Row><Title level={3}>Entrenadores</Title><Divider style={{ margin: "0px" }} /></Row>
-
-              <List
-                itemLayout="vertical"
-                size="large"
-                pagination={{
-                  onChange: page => {
-                    console.log(page);
-                  },
-                  pageSize: 5,
-                }}
-
-                dataSource={trainers}
-
-                renderItem={item => (
-                  <List.Item
-                    key={item.trainer_id}
-                    actions={[
-                      <IconText icon={StarOutlined} text={
-                        item.num_ratings === 0 ? "Sin calificar" : (10 * item.sum_ratings / item.num_ratings) + ""
-                      } key="list-vertical-star-o" />,
-                      <IconText icon={PhoneOutlined} text={item.telephone} key="list-vertical-star-o" />,
-                      <IconText icon={HomeOutlined} text={item.city} key="list-vertical-star-o" />,
-                    ]}
-
-                    onClick={() => history.push('/session/' + item.trainer_id)}
-
-                    style={{ cursor: "pointer" }}
-
-                  >
-                    <List.Item.Meta
-                      avatar={<Avatar style={{ width: "100px", height: "100px" }} src={item.photo} />}
-                      title={<p style={{ color: "#434343" }}>{item.trainer_name}</p>}
-                      description={
-                        <>
-                          <div>{
-                            item.specialities.map(
-                              speciality => <React.Fragment key={speciality}>{speciality} </React.Fragment>
-                            )
-                          }</div>
-                        </>
-                      }
-                    />
-                    {item.description}
-                  </List.Item>
-                )}
-              />
-            </Col>
-
-          </Row>
-        </Col>
-      </Row>
-    </>
+      </>
   )
 }
+
+export default UserSessionHome;
+
 
 const GET_USER_SESSIONS_COACH = gql`
 query getUserSessionsCoach($token:String!, $coach:Int!){ 
@@ -219,9 +115,6 @@ query getUserSessionsCoach($token:String!, $coach:Int!){
   }
 }
 `
-
-export default UserSessionHome;
-
 
 const dateFormatYYYMMDD = (today) => {
   let month = '' + (today.getMonth() + 1);
@@ -525,13 +418,13 @@ const DayComponent = ({ dayNumber, name, hours, onClickHour }) => {
               case 1:
                 color = "#7cb305"
                 content = "Puedes tener una sesion en este horario"
-                cursor = "pointer";
                 card = <CardAvailable onClickExit={() => onClickHour(null)} name={name} hourSession={item} />
                 break;
               case 2:
                 card = <CardTaken onClickExit={() => onClickHour(null)} name={name} hourSession={item} />
                 color = "#096dd9"
                 content = "Has seleccionado este horario."
+                cursor = "pointer";
                 break;
               case 4:
                 color = "#8c8c8c"
@@ -597,14 +490,9 @@ const ListItem = ({ color, cursor, onClick, nameStatus }) => {
 
 const CardAvailable = ({ name, onClickExit, hourSession }) => {
 
-  const token = useQuery(GET_TOKEN).data.token;
 
-  const { iniTime, daySession, endTime } = hourSession;
+  const { iniTime } = hourSession;
 
-  const variables = {
-    token: token,
-    schedule: hourSession.id_schedule
-  }
 
   return (
     <>

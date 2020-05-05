@@ -28,10 +28,11 @@ const Navbar = () => {
                     <Col>
                         <Menu theme="dark" className="BlackColorMenu" mode="horizontal" defaultSelectedKeys={['1']}>
                             <Menu.Item key="1" onClick={() => { history.push('/') }} >Inicio</Menu.Item>
-                            <Menu.Item key="2" onClick={() => { history.push('/session') }}>Sesiones</Menu.Item>
-                            <Menu.Item key="3" onClick={() => { history.push('/routines') }}>Rutinas</Menu.Item>
-                            <Menu.Item key="4" onClick={() => { history.push('/profile') }} >Perfil</Menu.Item>
-                            <Menu.Item key="5" onClick={
+                            <Menu.Item key="2" onClick={() => { history.push('/schedule') }}>Horario</Menu.Item>
+                            <Menu.Item key="3" onClick={() => { history.push('/trainers') }}>Entrenadores</Menu.Item>
+                            <Menu.Item key="4" onClick={() => { history.push('/routines') }}>Rutinas</Menu.Item>
+                            <Menu.Item key="5" onClick={() => { history.push('/profile') }} >Perfil</Menu.Item>
+                            <Menu.Item key="6" onClick={
                                 () => {
                                     client.writeData({
                                         data: {
@@ -53,5 +54,6 @@ const Navbar = () => {
         </>
     )
 }
+
 
 export default Navbar;
