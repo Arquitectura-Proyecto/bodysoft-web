@@ -1,0 +1,7 @@
+version: '3'
+services: 
+    bodysoft-wa:
+        container_name: bodysoft-wa
+        build: .
+        ports: 
+            - '4000:4000'
