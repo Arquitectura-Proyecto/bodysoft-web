@@ -35,7 +35,7 @@ const TrainerRoutinesHome = (props) => {
   const [routinesData, setRoutinesData] = useState(null);
 
   const { data: cache } = useQuery(GET_AUTH_DATA);
-  const { loading, error, data } = useQuery(GET_ROUTINES, { variables: { token: cache.token } });
+  const { loading, error, data, refetch } = useQuery(GET_ROUTINES, { variables: { token: cache.token } });
 
   if (data && !routinesData) {
     setRoutinesData(data.getRoutineByIdOwner);
@@ -54,6 +54,7 @@ const TrainerRoutinesHome = (props) => {
     routines.push(data)
     setRoutinesData(routines);
     setPageState('routines');
+    refetch();
   }
 
   if (loading) {
