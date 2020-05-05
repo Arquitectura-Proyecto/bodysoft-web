@@ -34,7 +34,7 @@ const UserProfilePage = () => {
   const [userData, setUserData] = useState(null);
 
   const { data: cache } = useQuery(GET_AUTH_DATA);
-  const { loading, error, data } = useQuery(GET_PROFILE, { variables: { token: cache.token } });
+  const { loading, error, data , refetch} = useQuery(GET_PROFILE, { variables: { token: cache.token } });
 
   const goToProfile = () => {
     setPageState('profile');
@@ -51,6 +51,7 @@ const UserProfilePage = () => {
   const changedProfile = (data) => {
     setUserData(data);
     setPageState('profile');
+    refetch();
   }
 
   if (data && !userData) {

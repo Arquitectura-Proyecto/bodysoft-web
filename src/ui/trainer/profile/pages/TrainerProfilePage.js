@@ -50,8 +50,8 @@ const TrainerProfilePage = () => {
   const [degreesData, setDegreesData] = useState(null);
 
   const { data: cache } = useQuery(GET_AUTH_DATA);
-  const { loading, error, data } = useQuery(GET_PROFILE, { variables: { token: cache.token } });
-  const { loading: loading2, error: error2, data: degrees } = useQuery(GET_DEGREES, { variables: { token: cache.token } });
+  const { loading, error, data, refetch } = useQuery(GET_PROFILE, { variables: { token: cache.token } });
+  const { loading: loading2, error: error2, data: degrees, refetch: refetch2 } = useQuery(GET_DEGREES, { variables: { token: cache.token } });
 
   const goToProfile = () => {
     setPageState('profile');
@@ -68,6 +68,7 @@ const TrainerProfilePage = () => {
   const changedProfile = (data) => {
     setTrainerData(data);
     setPageState('profile');
+    refetch();
   }
 
   const changedDegree = (data) => {
@@ -75,6 +76,7 @@ const TrainerProfilePage = () => {
     degress.push(data)
     setDegreesData(degress);
     setPageState('profile');
+    refetch2();
   }
 
   const changedSpeciality = (data) => {
@@ -82,6 +84,7 @@ const TrainerProfilePage = () => {
     specialities.push(data)
     setTrainerData({ ...trainerData, specialities: specialities });
     setPageState('profile');
+    refetch();
   }
 
   if (data && !trainerData) {
