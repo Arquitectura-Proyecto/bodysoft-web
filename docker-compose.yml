@@ -4,4 +4,4 @@ services:
         container_name: bodysoft-wa
         build: .
         ports: 
-            - '4000:4000'
+            - '3000:3000'
