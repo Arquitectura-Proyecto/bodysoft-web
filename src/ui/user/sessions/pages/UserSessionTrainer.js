@@ -78,9 +78,9 @@ query getProfileTrainer($idTrainer:ID!){
 `
 
 const CREATE_CHAT_USER_TRAINER = gql`
-mutation{
+mutation createChatUserTrainer($token:String!,$trainerId:ID!){
   createChatUserTrainer(
-    token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MywiUHJvZmlsZSI6dHJ1ZSwiVHlwZUlEIjoyLCJleHAiOjE1ODg4NTIwNzV9.7ZbVUzXto9svKaTe38PeWm_LiqeqDPP4-Nohmd2rDJI",trainerId:1
+    token:$token,trainerId:$trainerId
     ) {
     _id
     date
@@ -693,7 +693,7 @@ const CardAvailable = ({ name, onClickExit, hourSession }) => {
                 <Button
                   style={{ backgroundColor: "#ffbc02", borderColor: "#e3a765", width: "100%", color: "#231F20" }}
                   onClick={() => {
-                    createCahtUserTrainer();
+                    createCahtUserTrainer({variables:{token,trainerId:hourSession.idUser}});
                     onClickExit(registerSchedules({ variables }));
                   }}
                 >Crear</Button>
