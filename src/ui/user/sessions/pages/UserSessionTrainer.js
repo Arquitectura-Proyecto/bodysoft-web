@@ -89,7 +89,7 @@ const UserSessionTrainer = () => {
 
   const { data, loading, error } = useQuery(GET_USER_SESSIONS_COACH, { variables: { token, coach: parseInt(id) } })
 
-  const { data: dataProfile, loading: loadingProfile, error: errorProfile } = useQuery(GET_PROFILE_TRAINER,{variables:{idTrainer:id}})
+  const { data: dataProfile, loading: loadingProfile, error: errorProfile } = useQuery(GET_PROFILE_TRAINER, { variables: { idTrainer: id } })
 
   const dayHours = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24']
 
@@ -100,8 +100,8 @@ const UserSessionTrainer = () => {
   }
 
   if (error || errorProfile) {
-    console.log("error",error)
-    console.log("errorProfile",errorProfile)
+    console.log("error", error)
+    console.log("errorProfile", errorProfile)
     return <div>error</div>
   }
 
@@ -110,13 +110,13 @@ const UserSessionTrainer = () => {
       {React.createElement(icon)}
       {text}
     </Space>
-  );  
+  );
 
   const profile = dataProfile.profileTrainerById;
 
-  profile.photo='https://www.frankzane.com/wp-content/uploads/Frank-Home-04-450x450.jpg';
+  profile.photo = 'https://www.frankzane.com/wp-content/uploads/Frank-Home-04-450x450.jpg';
 
-  console.log("profileTrainerById",dataProfile.profileTrainerById);
+  console.log("profileTrainerById", dataProfile.profileTrainerById);
 
   const trainers = [profile];
 
@@ -183,13 +183,24 @@ const UserSessionTrainer = () => {
       </Row>
       <Row><br /></Row>
       <Row><br /></Row>
-      <Row justify="center" >
+
+      <Row justify="center">
+
         <Col xs={23}>
           <Row justify="center"
             style={{ //height: "500px", overflow: "auto", 
               border: "1px solid #e8e8e8", borderRadius: "4px", padding: "8px 24px", backgroundColor: "white"
             }}
           >
+
+            <Col xs={24}>
+              <Row justify="center">
+                <Row><Title level={3}>Perfil del entrenador</Title></Row>
+                <Divider/>
+              </Row>
+            </Col>
+
+
             <Col xs={3}>
               <Row justify="center"  ><Title level={3}>Horario</Title></Row>
               <List
@@ -212,6 +223,7 @@ const UserSessionTrainer = () => {
               />
             </Col>
             <DaysCalendar sessions={data.getAllbyCoachAvaibles} onClickHour={(e) => { setCardSession(e) }} />
+
           </Row>
         </Col>
       </Row>
@@ -600,7 +612,7 @@ const CardAvailable = ({ name, onClickExit, hourSession }) => {
 
   const token = useQuery(GET_TOKEN).data.token;
 
-  const { data: dataSesssion, error: errorSession, loading: loadingSesssion} = useQuery(GET_SESSIONS_USER,{variables:{token}});
+  const { data: dataSesssion, error: errorSession, loading: loadingSesssion } = useQuery(GET_SESSIONS_USER, { variables: { token } });
 
   const { iniTime, daySession, endTime } = hourSession;
 
@@ -621,15 +633,15 @@ const CardAvailable = ({ name, onClickExit, hourSession }) => {
           data: { getAllbyCoachAvaibles: getAllbyCoachAvaibles.filter(session => session.id_schedule !== hourSession.id_schedule) },
         })
       }
-      ,refetchQueries:[{query:GET_SESSIONS_USER,variables:{token}}]
+      , refetchQueries: [{ query: GET_SESSIONS_USER, variables: { token } }]
     },
   )
 
-  if(errorSession){
+  if (errorSession) {
     return <div>error</div>
   }
 
-  if(loadingSesssion){
+  if (loadingSesssion) {
     return <div>loading</div>
   }
 
