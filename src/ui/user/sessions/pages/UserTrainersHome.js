@@ -57,7 +57,7 @@ const UserTrainersHome = () => {
 
   const token = useQuery(GET_TOKEN).data.token;
 
-  const { error: errorSession, loading: loadingSesssion,refetch} = useQuery(GET_SESSIONS_USER,{variables:{token}});
+  const { error: errorSession, loading: loadingSesssion} = useQuery(GET_SESSIONS_USER,{variables:{token}});
 
   const history = useHistory();
   const location = useLocation();
@@ -89,7 +89,6 @@ const UserTrainersHome = () => {
 
   return (
     <>
-    <button onClick={()=>{refetch()}}>refetch</button>
     {cardSession}
     <Row><br /></Row>
       <Row justify="center">
