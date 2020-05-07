@@ -758,6 +758,7 @@ const CardTaken = ({ name, onClickExit, hourSession }) => {
 
   const { loading, error, data } = useQuery(CHATS_TRAINER, {
     variables: { token, userId: hourSession.idUser },
+    skip:false,
     pollInterval: 1000,
   });
 
