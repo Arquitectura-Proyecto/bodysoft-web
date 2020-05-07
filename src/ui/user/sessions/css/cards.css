@@ -1,0 +1,34 @@
+.backdropCard{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    top: 0;
+    margin: 0%;
+    padding: 0;
+}
+
+.maincardChat{
+    position: fixed;
+    z-index: 10001;
+    width: 500px;
+    margin-left: 35%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+@media only screen and (max-width:768px){
+    .maincard{
+        width: 60%;
+        margin-left: 20%;
+    }
+    
+}
+
+@media only screen and (max-width:425px){
+    .maincard{
+        width: 90%;
+        margin-left: 5%;
+    }
+}

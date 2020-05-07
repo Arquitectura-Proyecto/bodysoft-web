@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import '../../../../shared/css/colors.css'
 import '../css/trainerSession.css'
 import '../css/cards.css'
 import 'antd/dist/antd.css';
-import { Typography, Row, Col, List, Popover, Button, Card } from 'antd';
-
+import { Typography, Row, Col, List, Popover, Button, Card, Input } from 'antd';
+import { CheckOutlined } from "@ant-design/icons";
 
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 const { Title, } = Typography;
-
-
+const { Search } = Input;
 
 const GET_SESSIONS = gql`
   query GetSessions($Token:String!){
@@ -76,6 +75,42 @@ mutation deleteTakenSession($token:String!,$schedule:Int!){
 }
 `
 
+
+const CHATS_TRAINER = gql`
+query chatsTrainer($token:String!,$userId:ID!){
+  chatTrainerUser(token: $token, 
+    userId:$userId
+    ){
+    _id
+    date
+    id_user
+    id_trainer
+    messages {
+      _id
+      date
+      id_author
+      content
+    }
+  }
+}
+`
+
+const SEND_MESSAGE = gql`
+mutation sendMessage($token:String!,$chatId:ID!,$content:String!){
+  createMessageTrainerUser(
+  token:$token
+  chatId:$chatId
+  message: {
+      content:$content
+    }){
+    _id
+    date
+    id_author
+    content
+  }
+}
+`
+
 const TrainerSessionHome = () => {
 
   const token = useQuery(GET_TOKEN).data.token;
@@ -105,18 +140,18 @@ const TrainerSessionHome = () => {
   return (
     <>
       {cardSession}
-      <Row><br/></Row>
+      <Row><br /></Row>
       <Row justify="center">
         <Col>
           <h1 className="TitleFontTypeRoboto mb-0">Tus sesiones</h1>
         </Col>
       </Row>
-      <Row><br/></Row>
+      <Row><br /></Row>
       <Row justify="center" >
         <Col xs={23}>
           <Row justify="center"
             style={{ //height: "500px", overflow: "auto", 
-              border: "1px solid #e8e8e8", borderRadius: "4px", padding: "8px 24px",backgroundColor:"white"
+              border: "1px solid #e8e8e8", borderRadius: "4px", padding: "8px 24px", backgroundColor: "white"
             }}
           >
             <Col xs={3}>
@@ -167,15 +202,15 @@ const dateFormatYYYMMDD = (today) => {
 const DaysCalendar = ({ sessions, onClickHour }) => {
 
   //console.log("DAYCALENDAR", sessions)
-/*
-  sessions.getAllbyId.map(session => {
-    //console.log(session);
-    //session.hour = session.iniTime.substring(0, 2);
-    //session.day = session.daySession.substring(8, 10);
-    //session.dateNumber = session.daySession + "-" + session.iniTime.substring(0, 2);
-    return session;
-  })
-*/
+  /*
+    sessions.getAllbyId.map(session => {
+      //console.log(session);
+      //session.hour = session.iniTime.substring(0, 2);
+      //session.day = session.daySession.substring(8, 10);
+      //session.dateNumber = session.daySession + "-" + session.iniTime.substring(0, 2);
+      return session;
+    })
+  */
 
   let day1 = new Date();
   let day2 = new Date();
@@ -562,7 +597,7 @@ const CardFree = ({ name, onClickExit, hourSession }) => {
 
   return (
     <>
-      <div className="maincard" style={{ backgroundColor: "white", borderRadius: "4px" }}>
+      <div className="maincardChat" style={{ backgroundColor: "white", borderRadius: "4px" }}>
         <Card title={<h2>Añadir sesión </h2>} bordered={false}>
           <Row>
             <Col xs={12}>
@@ -691,7 +726,7 @@ const CardTaken = ({ name, onClickExit, hourSession }) => {
 
   const { iniTime } = hourSession;
 
-  console.log("id_schedule", hourSession.id_schedule)
+  //console.log("id_schedule", hourSession.id_schedule)
 
   const variables = {
     token: token,
@@ -703,7 +738,7 @@ const CardTaken = ({ name, onClickExit, hourSession }) => {
     {
       update(cache) {
         const { getAllbyId } = cache.readQuery({ query: GET_SESSIONS, variables: { Token: token } });
-        
+
         cache.writeQuery({
           query: GET_SESSIONS, variables: { Token: token },
           data: { getAllbyId: getAllbyId.filter(session => session.id_schedule !== hourSession.id_schedule) },
@@ -712,10 +747,116 @@ const CardTaken = ({ name, onClickExit, hourSession }) => {
     }
   )
 
+  //mensajes
+  const [menssage, setMenssage] = useState("");
+
+  //const [messages, setMessages] = useState([]);
+
+  const messagesEndRef = useRef(null);
+
+
+
+  const { loading, error, data } = useQuery(CHATS_TRAINER, {
+    variables: { token, userId: hourSession.idUser },
+    pollInterval: 1000,
+  });
+
+  //console.log("DATA", data);
+
+  const messages = (data && data.chatTrainerUser && data.chatTrainerUser.messages) || [];
+
+  //console.log("messages", messages);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current && messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(scrollToBottom, [messages]);
+
+
+  //send message
+
+  const [sendMessage] = useMutation(
+    SEND_MESSAGE
+  )
+
+
+  if (error) {
+    return <div className="alert alert-danger m-0" role="alert">
+      {error.message.substring(19)}
+    </div>
+  }
+
+  if (loading) {
+    return <div className="spinner-border text-warning" role="status">
+      <span className="sr-only">Loading...</span>
+    </div>
+  }
+
+
   return (
     <>
-      <div className="maincard" style={{ backgroundColor: "white", borderRadius: "4px" }}>
+      <div className="maincardChat" style={{ backgroundColor: "white", borderRadius: "4px" }}>
         <Card title={<h2>Eliminar sesión </h2>} bordered={false}>
+          <Row style={{
+            border: "1px solid #e8e8e8", borderRadius: "4px", padding: "8px 24px", backgroundColor: "white"
+          }} >
+            <Col xs={24} style={{ height: "300px" }}>
+              <Row style={{ overflow: "auto", height: "300px", }}>
+                <Col xs={24} style={{ height: "300px" }}></Col>
+                {messages.map(message => {
+                  if (data.chatTrainerUser.id_trainer === message.id_author){
+                    return (
+                      <Col key={message._id} xs={24}>
+                        <Row key={message._id} justify="end">
+                          <p key={message._id} style={{
+                            border: "1px solid #d3e7c2", borderRadius: "4px", backgroundColor: "#d3e7c2", paddingLeft: "10px", paddingRight: "10px",
+                            maxWidth: "80%", wordBreak: "break-all",
+                          }}>{message.content}</p>
+                        </Row>
+                      </Col>
+                    )
+                  }
+                  return (
+                      <Col key={message._id} xs={24}>
+                        <Row key={message._id}>
+                          <p key={message._id} style={{
+                            border: "1px solid #e8e8e8", borderRadius: "4px", backgroundColor: "#f0f0f0", paddingLeft: "10px", paddingRight: "10px",
+                            maxWidth: "80%", wordBreak: "break-all",
+                          }}>{message.content}</p>
+                        </Row>
+                      </Col>
+                    )
+                }
+                )}
+                <div ref={messagesEndRef} />
+              </Row>
+            </Col>
+            <Search
+              placeholder="Escribe el mensaje que deseas enviar"
+              enterButton={<CheckOutlined />}
+              size="large"
+              value={menssage}
+              onChange={e => {
+                //console.log("VALUE", e.target.value);
+                setMenssage(e.target.value);
+              }}
+              onSearch={value => {
+                //console.log(value);
+                setMenssage("")
+                if (value) {
+                  sendMessage({
+                    variables: {
+                      chatId: data.chatTrainerUser._id,
+                      token,
+                      content: menssage
+                    }
+                  });
+                }
+              }}
+            />
+          </Row>
+          <br />
           <Row>
             <Col xs={12}>
               <h4>Dia:</h4>
