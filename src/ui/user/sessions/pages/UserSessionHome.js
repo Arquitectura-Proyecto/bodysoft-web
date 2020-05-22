@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import { Typography, Row, Col, List, Popover, Button, Card } from 'antd';
+import { Typography, Row, Col, List, Popover, Button, Card, Input } from 'antd';
+import { CheckOutlined } from "@ant-design/icons";
+
+import '../css/cards.css'
+
+const { Search } = Input;
 
 const { Title, } = Typography;
 
@@ -38,27 +43,62 @@ mutation cancelSessionUser($token:String!,$schedule:Int!){
 }
 `
 
+const CHATS_USER = gql`
+query getChatsUSer($token:String!,$trainerId:ID!){
+  chatUserTrainer(
+    token:$token
+    trainerId:$trainerId
+  ) {
+    _id
+    date
+    id_user
+    id_trainer
+    messages {
+      _id
+      date
+      id_author
+      content
+    }
+  }
+}
+`
+const SEND_MESSAGE = gql`
+mutation sendMessage($token:String!,$chatId:ID!,$content:String!){
+  createMessageUserTrainer(
+  token:$token,
+  chatId:$chatId,
+  message:{
+    content:$content
+  }) {
+    _id
+    date
+    id_author
+    content
+  }
+}
+`
+
 const UserSessionHome = () => {
 
   const token = useQuery(GET_TOKEN).data.token;
 
-  const { data: dataSesssion, error: errorSession, loading: loadingSesssion} = useQuery(GET_SESSIONS_USER,{variables:{token}});
+  const { data: dataSesssion, error: errorSession, loading: loadingSesssion } = useQuery(GET_SESSIONS_USER, { variables: { token } });
 
   const [cardSession, setCardSession] = useState(null);
 
-  if ( errorSession) {
+  if (errorSession) {
     return <div>error</div>
   }
 
-  if ( loadingSesssion) {
+  if (loadingSesssion) {
     return <div>loading...</div>
   }
 
   const dayHours = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24']
   return (
     <>
-    {cardSession}
-    <Row><br /></Row>
+      {cardSession}
+      <Row><br /></Row>
       <Row><br /></Row>
       <Row justify="center" >
         <Col xs={23}>
@@ -88,11 +128,11 @@ const UserSessionHome = () => {
                 )}
               />
             </Col>
-            <DaysCalendar sessions={dataSesssion.getCurrentbyId} onClickHour={(e) => {setCardSession(e)}} />
+            <DaysCalendar sessions={dataSesssion.getCurrentbyId} onClickHour={(e) => { setCardSession(e) }} />
           </Row>
         </Col>
       </Row>
-      </>
+    </>
   )
 }
 
@@ -543,12 +583,12 @@ const CardAvailable = ({ name, onClickExit, hourSession }) => {
 }
 
 const CardTaken = ({ name, onClickExit, hourSession }) => {
-  
+
   const token = useQuery(GET_TOKEN).data.token;
 
   const { iniTime } = hourSession;
 
-  console.log("id_schedule", hourSession.id_schedule)
+  //console.log("hourSession", hourSession)
 
   const variables = {
     token: token,
@@ -558,23 +598,129 @@ const CardTaken = ({ name, onClickExit, hourSession }) => {
   const [cancelSesssion] = useMutation(
     CANCEL_SESSION_USER,
     {
-      update(cache){
-        const {getCurrentbyId} = cache.readQuery({query:GET_SESSIONS_USER,variables:{token}})
+      update(cache) {
+        const { getCurrentbyId } = cache.readQuery({ query: GET_SESSIONS_USER, variables: { token } })
         cache.writeQuery(
           {
-            query:GET_SESSIONS_USER,variables:{token},
-            data:{getCurrentbyId:getCurrentbyId.filter(session=>session.id_schedule !== hourSession.id_schedule)}
+            query: GET_SESSIONS_USER, variables: { token },
+            data: { getCurrentbyId: getCurrentbyId.filter(session => session.id_schedule !== hourSession.id_schedule) }
           }
         )
       },
-      refetchQueries : [{query:GET_USER_SESSIONS_COACH,variables:{token,coach:hourSession.idCoach}}]
+      refetchQueries: [{ query: GET_USER_SESSIONS_COACH, variables: { token, coach: hourSession.idCoach } }]
     }
   )
 
+
+
+  //mensajes
+  const [menssage, setMenssage] = useState("");
+
+  //const [messages, setMessages] = useState([]);
+
+  const messagesEndRef = useRef(null);
+
+  console.log("hourSession.idCoach", hourSession.idCoach);
+
+  const { loading, error, data } = useQuery(CHATS_USER, {
+    variables: { token, trainerId: hourSession.idCoach },
+    skip:false,
+    pollInterval: 1000,
+  });
+
+  console.log("DATA", data);
+
+  const messages = (data && data.chatUserTrainer && data.chatUserTrainer.messages) || [];
+
+  const scrollToBottom = () => {
+    messagesEndRef.current && messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(scrollToBottom, [messages]);
+
+
+  //send message
+
+  const [sendMessage] = useMutation(
+    SEND_MESSAGE
+  )
+
+
+  if (error) {
+    return <div className="alert alert-danger m-0" role="alert">
+      {error.message.substring(19)}
+    </div>
+  }
+
+  if (loading) {
+    return <div className="spinner-border text-warning" role="status">
+      <span className="sr-only">Loading...</span>
+    </div>
+  }
+
   return (
     <>
-      <div className="maincard" style={{ backgroundColor: "white", borderRadius: "4px" }}>
+      <div className="maincardChat" style={{ backgroundColor: "white", borderRadius: "4px" }}>
         <Card title={<h2>Eliminar sesión </h2>} bordered={false}>
+          <Row style={{
+            border: "1px solid #e8e8e8", borderRadius: "4px", padding: "8px 24px", backgroundColor: "white"
+          }} >
+            <Col xs={24} style={{ height: "300px" }}>
+              <Row style={{ overflow: "auto", height: "300px", }}>
+                <Col xs={24} style={{ height: "300px" }}></Col>
+                {messages.map(message => {
+                  if (data.chatUserTrainer.id_user === message.id_author) {
+                    return (
+                      <Col key={message._id} xs={24}>
+                        <Row key={message._id} justify="end">
+                          <p key={message._id} style={{
+                            border: "1px solid #d3e7c2", borderRadius: "4px", backgroundColor: "#d3e7c2", paddingLeft: "10px", paddingRight: "10px",
+                            maxWidth: "80%", wordBreak: "break-all",
+                          }}>{message.content}</p>
+                        </Row>
+                      </Col>
+                    )
+                  }
+                  return (
+                      <Col key={message._id} xs={24}>
+                        <Row key={message._id}>
+                          <p key={message._id} style={{
+                            border: "1px solid #e8e8e8", borderRadius: "4px", backgroundColor: "#f0f0f0", paddingLeft: "10px", paddingRight: "10px",
+                            maxWidth: "80%", wordBreak: "break-all",
+                          }}>{message.content}</p>
+                        </Row>
+                      </Col>
+                    )
+                }
+                )}
+                <div ref={messagesEndRef} />
+              </Row>
+            </Col>
+            <Search
+              placeholder="Escribe el mensaje que deseas enviar"
+              enterButton={<CheckOutlined />}
+              size="large"
+              value={menssage}
+              onChange={e => {
+                //console.log("VALUE", e.target.value);
+                setMenssage(e.target.value);
+              }}
+              onSearch={value => {
+                //console.log(value);
+                setMenssage("")
+                if (value) {
+                  sendMessage({
+                    variables: {
+                      chatId: data.chatUserTrainer._id,
+                      token,
+                      content: menssage
+                    }
+                  });
+                }
+              }}
+            />
+          </Row>
+          <br />
           <Row>
             <Col xs={12}>
               <h4>Dia:</h4>
@@ -603,7 +749,7 @@ const CardTaken = ({ name, onClickExit, hourSession }) => {
                   style={{ backgroundColor: "#cf1322", borderColor: "#820014", width: "100%", color: "white" }}
 
                   onClick={() => {
-                    cancelSesssion({variables})
+                    cancelSesssion({ variables })
                     onClickExit();
                   }}
                 >Eliminar</Button>

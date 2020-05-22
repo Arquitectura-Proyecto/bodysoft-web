@@ -1,0 +1,23 @@
+.ant-menu.ant-menu-dark .ant-menu-item-selected,
+.ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
+    color: #231F20;
+    background-color: #ffc815;
+}
+
+.ant-menu.ant-menu-dark, .ant-menu-dark .ant-menu-sub{
+    background: #231F20;
+}
+
+.ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected{
+    background-color: #ffc815;
+}
+
+.BlackColorMenu {
+    background-color: #231F20 !important;
+}
+
+.LogoBodySoft {
+    width: 300px;
+    height: 31px;
+    float: left;
+  }

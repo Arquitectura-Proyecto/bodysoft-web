@@ -77,6 +77,19 @@ query getProfileTrainer($idTrainer:ID!){
 }
 `
 
+const CREATE_CHAT_USER_TRAINER = gql`
+mutation createChatUserTrainer($token:String!,$trainerId:ID!){
+  createChatUserTrainer(
+    token:$token,trainerId:$trainerId
+    ) {
+    _id
+    date
+    id_user
+    id_trainer
+  }
+}
+`
+
 const UserSessionTrainer = () => {
 
   const token = useQuery(GET_TOKEN).data.token;
@@ -637,6 +650,10 @@ const CardAvailable = ({ name, onClickExit, hourSession }) => {
     },
   )
 
+  const [createCahtUserTrainer] = useMutation(
+    CREATE_CHAT_USER_TRAINER
+  )
+
   if (errorSession) {
     return <div>error</div>
   }
@@ -676,6 +693,7 @@ const CardAvailable = ({ name, onClickExit, hourSession }) => {
                 <Button
                   style={{ backgroundColor: "#ffbc02", borderColor: "#e3a765", width: "100%", color: "#231F20" }}
                   onClick={() => {
+                    createCahtUserTrainer({variables:{token,trainerId:hourSession.idCoach}});
                     onClickExit(registerSchedules({ variables }));
                   }}
                 >Crear</Button>
@@ -736,7 +754,6 @@ const CardTaken = ({ name, onClickExit, hourSession }) => {
               <Row >
                 <Button
                   style={{ backgroundColor: "#cf1322", borderColor: "#820014", width: "100%", color: "white" }}
-
                   onClick={() => {
                     onClickExit();
                   }}
