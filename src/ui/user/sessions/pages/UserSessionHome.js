@@ -620,7 +620,7 @@ const CardTaken = ({ name, onClickExit, hourSession }) => {
 
   const messagesEndRef = useRef(null);
 
-
+  console.log("hourSession.idCoach", hourSession.idCoach);
 
   const { loading, error, data } = useQuery(CHATS_USER, {
     variables: { token, trainerId: hourSession.idCoach },
@@ -628,7 +628,7 @@ const CardTaken = ({ name, onClickExit, hourSession }) => {
     pollInterval: 1000,
   });
 
-  //console.log("DATA", data);
+  console.log("DATA", data);
 
   const messages = (data && data.chatUserTrainer && data.chatUserTrainer.messages) || [];
 

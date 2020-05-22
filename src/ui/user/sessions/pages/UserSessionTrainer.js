@@ -693,7 +693,7 @@ const CardAvailable = ({ name, onClickExit, hourSession }) => {
                 <Button
                   style={{ backgroundColor: "#ffbc02", borderColor: "#e3a765", width: "100%", color: "#231F20" }}
                   onClick={() => {
-                    createCahtUserTrainer({variables:{token,trainerId:hourSession.idUser}});
+                    createCahtUserTrainer({variables:{token,trainerId:hourSession.idCoach}});
                     onClickExit(registerSchedules({ variables }));
                   }}
                 >Crear</Button>
