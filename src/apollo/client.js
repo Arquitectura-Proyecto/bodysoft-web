@@ -4,7 +4,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 const cache = new InMemoryCache()
 
 const client = new ApolloClient({
-  uri: process.env.GATEWAY_URL || 'http://localhost:3800/graphql', cache
+  uri: process.env.GATEWAY_URL || 'http://localhost/graphql', cache
 });
 
 cache.writeData({  data: {
