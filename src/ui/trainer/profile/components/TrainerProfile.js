@@ -15,7 +15,7 @@ function storageData(ref, img) {
 
 function addImagen(img, id, loadImg, error, fullyLoaded) {
 
-  const task = storageData(`/UserPhotos/${id}`, img);
+  const task = storageData(`/TrainerPhotos/${id}`, img);
 
   task.on('state_changed',
     snapshot => {
