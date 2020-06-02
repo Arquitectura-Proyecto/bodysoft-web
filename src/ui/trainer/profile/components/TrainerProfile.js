@@ -95,7 +95,6 @@ const TrainerProfile = (props) => {
       }
     })
 
-  const [uploadimgstate, setUploadimgstate] = useState(false)
   const [percentageImageLoading, setPercentageImageLoading] = useState(0)
 
 
@@ -109,8 +108,6 @@ const TrainerProfile = (props) => {
     return <div>loading...</div>
   }
 
-  console.log("DATA", data.authValidateAuthToken.ID)
-
   const id = data.authValidateAuthToken.ID;
 
   const perfilImghandler = async (img) => {
@@ -122,8 +119,6 @@ const TrainerProfile = (props) => {
       () => {
         setPercentageImageLoading(100)
         setUploadImage(null)
-        console.log("TERMINOOOOOOO Terminar")
-        //dispatch(fetchUsers())
       }
     )
   }
@@ -145,7 +140,6 @@ const TrainerProfile = (props) => {
           let url = await task.snapshot.ref.getDownloadURL();
           variables.photo = url;
           variables.token = token;
-          //await this.firebaseCreateRepository.writeDocument("usuarios/" + this.getUserId(), { foto: url }, true)
           console.log("URL", url)
           console.log("VARIABLES", variables)
           updateProfile({ variables: variables });
@@ -156,8 +150,6 @@ const TrainerProfile = (props) => {
       }
     )
   }
-
-
 
   /*FIN ACTULIZACION DE IMAGEN*/
 
@@ -173,6 +165,7 @@ const TrainerProfile = (props) => {
     );
   }
 
+  
   let src;
 
   if (props.trainerData.photo !== 'none') {
@@ -181,7 +174,7 @@ const TrainerProfile = (props) => {
     src = "http://lorempixel.com/400/400/sports/";
   }
 
-  console.log("props.trainerData.specialities", props.trainerData)
+  /*ACTULIZACION DE IMAGEN*/
 
   let uploadImages;
 
@@ -193,6 +186,8 @@ const TrainerProfile = (props) => {
       onClickActualizar={(img) => { perfilImghandler(img) }}
     />
   }
+
+  /*FIN ACTULIZACION DE IMAGEN*/
 
   console.log("uploadImages",uploadImages);
 

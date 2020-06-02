@@ -25,7 +25,11 @@ const UserProfile = (props) => {
   return (
     <div className="row justify-content-center">
       <div className="col-12 col-md-4 p-0 text-center">
-        <img className="img-fluid d-inline d-md-none mb-5" src={src} alt={props.userData.user_name} style={{ width: "150px" }} />
+        <img className="img-fluid d-inline d-md-none mb-5" src={src} alt={props.userData.user_name} style={{ width: "150px" }} 
+          onClick={
+            ()=>console.log("soy una patata")
+            }
+        />
         <img className="img-fluid d-none d-md-inline" src={src} alt={props.userData.user_name} style={{ height: "100%" }} />
       </div>
       <div className="col-12 col-md-4 WhiteColor p-5">
